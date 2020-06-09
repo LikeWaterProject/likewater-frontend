@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/likewater/static/css/main.cd27eb34.chunk.css",
-    "main.js": "/likewater/static/js/main.35f1805f.chunk.js",
-    "main.js.map": "/likewater/static/js/main.35f1805f.chunk.js.map",
-    "runtime-main.js": "/likewater/static/js/runtime-main.c06e7718.js",
-    "runtime-main.js.map": "/likewater/static/js/runtime-main.c06e7718.js.map",
-    "static/css/2.b90b56a5.chunk.css": "/likewater/static/css/2.b90b56a5.chunk.css",
-    "static/js/2.844338ae.chunk.js": "/likewater/static/js/2.844338ae.chunk.js",
-    "static/js/2.844338ae.chunk.js.map": "/likewater/static/js/2.844338ae.chunk.js.map",
-    "index.html": "/likewater/index.html",
-    "precache-manifest.c004632ebc699ca4be3728b52d0157c8.js": "/likewater/precache-manifest.c004632ebc699ca4be3728b52d0157c8.js",
-    "service-worker.js": "/likewater/service-worker.js",
-    "static/css/2.b90b56a5.chunk.css.map": "/likewater/static/css/2.b90b56a5.chunk.css.map",
-    "static/css/main.cd27eb34.chunk.css.map": "/likewater/static/css/main.cd27eb34.chunk.css.map",
-    "static/js/2.844338ae.chunk.js.LICENSE.txt": "/likewater/static/js/2.844338ae.chunk.js.LICENSE.txt",
-    "static/media/semantic.min.css": "/likewater/static/media/outline-icons.ef60a4f6.woff"
+    "main.css": "/likewater-frontend/static/css/main.cd27eb34.chunk.css",
+    "main.js": "/likewater-frontend/static/js/main.dacce423.chunk.js",
+    "main.js.map": "/likewater-frontend/static/js/main.dacce423.chunk.js.map",
+    "runtime-main.js": "/likewater-frontend/static/js/runtime-main.3ef93a63.js",
+    "runtime-main.js.map": "/likewater-frontend/static/js/runtime-main.3ef93a63.js.map",
+    "static/css/2.0c2808c6.chunk.css": "/likewater-frontend/static/css/2.0c2808c6.chunk.css",
+    "static/js/2.844338ae.chunk.js": "/likewater-frontend/static/js/2.844338ae.chunk.js",
+    "static/js/2.844338ae.chunk.js.map": "/likewater-frontend/static/js/2.844338ae.chunk.js.map",
+    "index.html": "/likewater-frontend/index.html",
+    "precache-manifest.3bfdd08a527de74edb8200add0b2b478.js": "/likewater-frontend/precache-manifest.3bfdd08a527de74edb8200add0b2b478.js",
+    "service-worker.js": "/likewater-frontend/service-worker.js",
+    "static/css/2.0c2808c6.chunk.css.map": "/likewater-frontend/static/css/2.0c2808c6.chunk.css.map",
+    "static/css/main.cd27eb34.chunk.css.map": "/likewater-frontend/static/css/main.cd27eb34.chunk.css.map",
+    "static/js/2.844338ae.chunk.js.LICENSE.txt": "/likewater-frontend/static/js/2.844338ae.chunk.js.LICENSE.txt",
+    "static/media/semantic.min.css": "/likewater-frontend/static/media/outline-icons.ef60a4f6.woff"
   },
   "entrypoints": [
-    "static/js/runtime-main.c06e7718.js",
-    "static/css/2.b90b56a5.chunk.css",
+    "static/js/runtime-main.3ef93a63.js",
+    "static/css/2.0c2808c6.chunk.css",
     "static/js/2.844338ae.chunk.js",
     "static/css/main.cd27eb34.chunk.css",
-    "static/js/main.35f1805f.chunk.js"
+    "static/js/main.dacce423.chunk.js"
   ]
 }
