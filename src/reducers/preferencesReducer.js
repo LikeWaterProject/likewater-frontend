@@ -6,6 +6,8 @@ const INITIAL_STATE = {
     40.7311599,
   ],
   eventFilter: [],
+  showBasicMapFeatures: true,
+  showVolumetricBuildings: true,
 };
 
 export default (state = INITIAL_STATE, { type, payload }) => {
