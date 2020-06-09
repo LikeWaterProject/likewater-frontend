@@ -4,11 +4,12 @@ import { Header, Icon, Image, Menu, Segment, Sidebar } from "semantic-ui-react";
 
 import "./App.css";
 import MapView from "./MapView";
-import SideCar from "./SideCar";
+import TopSheet from "./TopSheet";
+import BottomSheet from "./BottomSheet";
 
 const App = ({ events, preferences }) => {
   const [position, setPosition] = useState(preferences.defaultPosition);
-  const [areControlsVisible, setControlsVisible] = useState(true);
+  const [controlsVisible, setControlsVisible] = useState(true);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -30,7 +31,8 @@ const App = ({ events, preferences }) => {
 
   return (
     <Sidebar.Pushable className="no-overflow">
-      <SideCar visible={areControlsVisible} />
+      <TopSheet visible={controlsVisible} />
+      <BottomSheet visible={controlsVisible} />
       <Sidebar.Pusher>
         <MapView position={position} onClick={handleMapClick} />
       </Sidebar.Pusher>
