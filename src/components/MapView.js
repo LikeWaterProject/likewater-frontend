@@ -6,6 +6,8 @@ const Map = ReactMapboxGl({
     "pk.eyJ1IjoicmVrdGRlY2thcmQiLCJhIjoiY2theWJ4OXM0MGhiejJ3cnkzcmk0andiYyJ9.IinlG0vyUvcWhvlAREJXeA",
 });
 
+const defaultZoom = [10];
+
 const data = [
   {
     mentions: 248 / 50,
@@ -71,24 +73,28 @@ const layerPaint = {
 };
 
 const MapView = ({ position, onClick }) => {
-  if (!position) return;
+  if (!position) return null;
 
   return (
-    <Map
-      style="mapbox://styles/rektdeckard/ckayd52rb0xzg1imcbyek0g4y"
-      center={position}
-      containerStyle={{
-        height: "100%",
-        width: "100%",
-      }}
-      onClick={onClick}
-    >
-      <Layer type="heatmap" paint={layerPaint}>
-        {data.map((el, index) => (
-          <Feature key={index} coordinates={el.location} properties={el} />
-        ))}
-      </Layer>
-    </Map>
+    <div style={{ height: "100vh", width: "100vw" }}>
+      <Map
+        style="mapbox://styles/rektdeckard/ckayd52rb0xzg1imcbyek0g4y"
+        center={position}
+        zoom={defaultZoom}
+        containerStyle={{
+          height: "100%",
+          width: "100%",
+        }}
+        onDragStart={onClick}
+        onDragEnd={onClick}
+      >
+        <Layer type="heatmap" paint={layerPaint}>
+          {data.map((el, index) => (
+            <Feature key={index} coordinates={el.location} properties={el} />
+          ))}
+        </Layer>
+      </Map>
+    </div>
   );
 };
 

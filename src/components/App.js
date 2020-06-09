@@ -1,37 +1,48 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { Header, Icon, Image, Menu, Segment, Sidebar } from "semantic-ui-react";
 
+import "./App.css";
 import MapView from "./MapView";
 import SideCar from "./SideCar";
 
-const App = () => {
-  const [position, setPosition] = useState([-78.9715041, 40.7311599]);
-  const [sidebarVisible, setSidebarVisible] = useState(true);
+const App = ({ events, preferences }) => {
+  const [position, setPosition] = useState(preferences.defaultPosition);
+  const [areControlsVisible, setControlsVisible] = useState(true);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((geolocationPosition) => {
-      const {
-        coords: { longitude, latitude },
-      } = geolocationPosition;
-      setPosition([longitude, latitude]);
-    });
+    navigator.geolocation.getCurrentPosition(
+      (geolocationPosition) => {
+        const {
+          coords: { longitude, latitude },
+        } = geolocationPosition;
+        setPosition([longitude, latitude]);
+      },
+      console.error,
+      { enableHighAccuracy: false, maximumAge: 15000, timeout: 30000 }
+    );
   }, []);
 
+  const handleMapClick = (event) => {
+    console.log(event);
+    setControlsVisible((v) => !v);
+  };
+
   return (
-    <Sidebar.Pushable>
-      <SideCar visible={sidebarVisible} />
+    <Sidebar.Pushable className="no-overflow">
+      <SideCar visible={areControlsVisible} />
       <Sidebar.Pusher>
-        <div style={{ height: "100vh", width: "100vw" }}>
-          <MapView
-            position={position}
-            onClick={() =>
-              setSidebarVisible((sidebarVisible) => !sidebarVisible)
-            }
-          />
-        </div>
+        <MapView position={position} onClick={handleMapClick} />
       </Sidebar.Pusher>
     </Sidebar.Pushable>
   );
 };
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    preferences: state.preferences,
+    events: state.events,
+  };
+};
+
+export default connect(mapStateToProps, {})(App);
