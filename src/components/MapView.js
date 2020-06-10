@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { useWindowSize } from "react-use";
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
-import { Icon } from "semantic-ui-react";
 
 const Map = ReactMapboxGl({
   accessToken:
@@ -41,7 +40,7 @@ const data = [
   },
 ];
 
-const MapView = ({ position, onClick, preferences }) => {
+const MapView = ({ position, onDrag, onDismiss, preferences }) => {
   const { width, height } = useWindowSize();
 
   // TODO: can remove null check once position is part of global state
@@ -59,8 +58,9 @@ const MapView = ({ position, onClick, preferences }) => {
           height: "100%",
           width: "100%",
         }}
-        onDragStart={onClick}
-        onDragEnd={onClick}
+        onDragStart={() => onDrag(true)}
+        onDragEnd={() => onDrag(false)}
+        onClick={onDismiss}
       >
         {showVolumetricBuildings && (
           <Layer

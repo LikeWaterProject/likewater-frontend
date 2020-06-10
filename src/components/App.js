@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { connect } from "react-redux";
+import { useLocation, useHistory } from "react-router-dom";
 import { Header, Icon, Image, Menu, Segment, Sidebar } from "semantic-ui-react";
 
 import "./App.css";
@@ -10,6 +11,32 @@ import BottomSheet from "./BottomSheet";
 const App = ({ events, preferences }) => {
   const [position, setPosition] = useState(preferences.defaultPosition);
   const [controlsVisible, setControlsVisible] = useState(true);
+  const [isDragging, setDragging] = useState(false);
+  const location = useLocation();
+  const history = useHistory();
+  const menuItems = useMemo(
+    () => [
+      {
+        key: "nearby",
+        name: "Nearby",
+        path: "/nearby",
+        active: location.pathname === "/nearby",
+      },
+      {
+        key: "report",
+        name: "Report",
+        path: "/report",
+        active: location.pathname === "/report",
+      },
+      {
+        key: "sos",
+        name: "SOS",
+        path: "/sos",
+        active: location.pathname === "/sos",
+      },
+    ],
+    [location]
+  );
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -24,19 +51,35 @@ const App = ({ events, preferences }) => {
     );
   }, []);
 
-  const handleMapClick = (event) => {
-    console.log(event);
-    setControlsVisible((v) => !v);
+  const handleMenuItemClick = (event, data) => {
+    const { path } = data;
+    setControlsVisible(true);
+    history.push(path);
   };
 
   return (
-    <Sidebar.Pushable className="no-overflow">
-      <TopSheet visible={controlsVisible} />
-      <BottomSheet visible={controlsVisible} />
-      <Sidebar.Pusher>
-        <MapView position={position} onClick={handleMapClick} />
-      </Sidebar.Pusher>
-    </Sidebar.Pushable>
+    <>
+      <Sidebar.Pushable className="no-overflow">
+        <TopSheet visible={controlsVisible && !isDragging} />
+        <BottomSheet visible={controlsVisible && !isDragging} />
+        <Sidebar.Pusher>
+          <MapView
+            position={position}
+            onDrag={setDragging}
+            onDismiss={() => setControlsVisible((v) => !v)}
+          />
+        </Sidebar.Pusher>
+      </Sidebar.Pushable>
+      <Menu
+        pointing
+        inverted
+        fixed="bottom"
+        size="large"
+        widths={3}
+        onItemClick={handleMenuItemClick}
+        items={menuItems}
+      />
+    </>
   );
 };
 
