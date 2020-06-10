@@ -2,8 +2,8 @@ import { SET_DEFAULT_POSITION, SET_EVENT_FILTER } from "../actions";
 
 const INITIAL_STATE = {
   defaultPosition: JSON.parse(localStorage.getItem(SET_DEFAULT_POSITION)) ?? [
-    -78.9715041,
-    40.7311599,
+    -74.0,
+    40.73,
   ],
   eventFilter: [],
   showBasicMapFeatures: true,
