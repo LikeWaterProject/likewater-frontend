@@ -18,3 +18,11 @@ export const getEventDetails = (eventId) => async (dispatch) => {
     payload: result.data,
   });
 };
+
+export const reportEvent = (report) => async (dispatch) => {
+  const result = await API.post("/submitreport", report);
+  dispatch({
+    type: null,
+  });
+};
+
