@@ -1,31 +1,35 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b1b8aab23591d8fa14b257b6f6af0ed7",
+    "revision": "169fb21381eea0178be4a749dec20211",
     "url": "/likewater-frontend/index.html"
   },
   {
-    "revision": "393f67d147d8f702fb17",
+    "revision": "131e0097d37cee9d5056",
     "url": "/likewater-frontend/static/css/2.0c2808c6.chunk.css"
   },
   {
-    "revision": "85641b8c993e1d7a34a7",
+    "revision": "7164240b4a9438b20f0d",
     "url": "/likewater-frontend/static/css/main.cd27eb34.chunk.css"
   },
   {
-    "revision": "393f67d147d8f702fb17",
-    "url": "/likewater-frontend/static/js/2.844338ae.chunk.js"
+    "revision": "131e0097d37cee9d5056",
+    "url": "/likewater-frontend/static/js/2.13feae6d.chunk.js"
   },
   {
     "revision": "4d47ffde3dc69784e8e23fd910817ef8",
-    "url": "/likewater-frontend/static/js/2.844338ae.chunk.js.LICENSE.txt"
+    "url": "/likewater-frontend/static/js/2.13feae6d.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "85641b8c993e1d7a34a7",
-    "url": "/likewater-frontend/static/js/main.dacce423.chunk.js"
+    "revision": "726852a3f2f962827917",
+    "url": "/likewater-frontend/static/js/3.47420bf9.chunk.js"
   },
   {
-    "revision": "3aeee4c127fb645142d0",
-    "url": "/likewater-frontend/static/js/runtime-main.3ef93a63.js"
+    "revision": "7164240b4a9438b20f0d",
+    "url": "/likewater-frontend/static/js/main.cd8cb5a7.chunk.js"
+  },
+  {
+    "revision": "13fc14e061f5a8edbd0e",
+    "url": "/likewater-frontend/static/js/runtime-main.fafdee41.js"
   },
   {
     "revision": "13db00b7a34fee4d819ab7f9838cc428",
