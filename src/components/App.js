@@ -42,8 +42,8 @@ const App = ({ events, preferences }) => {
 
 const mapStateToProps = (state) => {
   return {
-    preferences: state.preferences,
     events: state.events,
+    preferences: state.preferences,
   };
 };
 

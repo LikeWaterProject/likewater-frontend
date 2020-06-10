@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { useWindowSize } from "react-use";
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
 import { Icon } from "semantic-ui-react";
 
@@ -41,13 +42,15 @@ const data = [
 ];
 
 const MapView = ({ position, onClick, preferences }) => {
+  const { width, height } = useWindowSize();
+
   // TODO: can remove null check once position is part of global state
   if (!position) return null;
 
   const { showVolumetricBuildings, showBasicMapFeatures } = preferences;
 
   return (
-    <div style={{ height: "100vh", width: "100vw" }}>
+    <div style={{ width, height }}>
       <Map
         style="mapbox://styles/rektdeckard/ckayd52rb0xzg1imcbyek0g4y"
         center={position}
