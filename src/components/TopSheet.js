@@ -5,13 +5,12 @@ const TopSheet = ({ visible }) => {
   return (
     <Sidebar
       as={Segment}
-      animation="overlay"
-      icon="labeled"
-      direction="top"
       inverted
-      vertical
+      raised
+      direction="top"
+      animation="overlay"
+      textAlign="center"
       visible={visible}
-      width="thin"
     >
       <Search />
     </Sidebar>
