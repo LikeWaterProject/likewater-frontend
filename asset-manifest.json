@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/likewater-frontend/static/css/main.88946a4f.chunk.css",
-    "main.js": "/likewater-frontend/static/js/main.53e5673c.chunk.js",
-    "main.js.map": "/likewater-frontend/static/js/main.53e5673c.chunk.js.map",
-    "runtime-main.js": "/likewater-frontend/static/js/runtime-main.85af7c52.js",
-    "runtime-main.js.map": "/likewater-frontend/static/js/runtime-main.85af7c52.js.map",
+    "main.js": "/likewater-frontend/static/js/main.7e436c69.chunk.js",
+    "main.js.map": "/likewater-frontend/static/js/main.7e436c69.chunk.js.map",
+    "runtime-main.js": "/likewater-frontend/static/js/runtime-main.9ee12c75.js",
+    "runtime-main.js.map": "/likewater-frontend/static/js/runtime-main.9ee12c75.js.map",
     "static/css/2.cf4ecf51.chunk.css": "/likewater-frontend/static/css/2.cf4ecf51.chunk.css",
-    "static/js/2.067996bf.chunk.js": "/likewater-frontend/static/js/2.067996bf.chunk.js",
-    "static/js/2.067996bf.chunk.js.map": "/likewater-frontend/static/js/2.067996bf.chunk.js.map",
-    "static/js/3.9ef3fb24.chunk.js": "/likewater-frontend/static/js/3.9ef3fb24.chunk.js",
-    "static/js/3.9ef3fb24.chunk.js.map": "/likewater-frontend/static/js/3.9ef3fb24.chunk.js.map",
-    "static/js/4.35e048aa.chunk.js": "/likewater-frontend/static/js/4.35e048aa.chunk.js",
-    "static/js/4.35e048aa.chunk.js.map": "/likewater-frontend/static/js/4.35e048aa.chunk.js.map",
-    "static/js/5.a6c3664e.chunk.js": "/likewater-frontend/static/js/5.a6c3664e.chunk.js",
-    "static/js/5.a6c3664e.chunk.js.map": "/likewater-frontend/static/js/5.a6c3664e.chunk.js.map",
+    "static/js/2.d148c886.chunk.js": "/likewater-frontend/static/js/2.d148c886.chunk.js",
+    "static/js/2.d148c886.chunk.js.map": "/likewater-frontend/static/js/2.d148c886.chunk.js.map",
+    "static/js/3.c9b7961e.chunk.js": "/likewater-frontend/static/js/3.c9b7961e.chunk.js",
+    "static/js/3.c9b7961e.chunk.js.map": "/likewater-frontend/static/js/3.c9b7961e.chunk.js.map",
+    "static/js/4.7d87073b.chunk.js": "/likewater-frontend/static/js/4.7d87073b.chunk.js",
+    "static/js/4.7d87073b.chunk.js.map": "/likewater-frontend/static/js/4.7d87073b.chunk.js.map",
+    "static/js/5.1ee04adb.chunk.js": "/likewater-frontend/static/js/5.1ee04adb.chunk.js",
+    "static/js/5.1ee04adb.chunk.js.map": "/likewater-frontend/static/js/5.1ee04adb.chunk.js.map",
     "index.html": "/likewater-frontend/index.html",
-    "precache-manifest.d81f3929e939cb79c3559325961a46ed.js": "/likewater-frontend/precache-manifest.d81f3929e939cb79c3559325961a46ed.js",
+    "precache-manifest.3dab09fc5335c0927aa55597bf21e24a.js": "/likewater-frontend/precache-manifest.3dab09fc5335c0927aa55597bf21e24a.js",
     "service-worker.js": "/likewater-frontend/service-worker.js",
     "static/css/2.cf4ecf51.chunk.css.map": "/likewater-frontend/static/css/2.cf4ecf51.chunk.css.map",
     "static/css/main.88946a4f.chunk.css.map": "/likewater-frontend/static/css/main.88946a4f.chunk.css.map",
-    "static/js/2.067996bf.chunk.js.LICENSE.txt": "/likewater-frontend/static/js/2.067996bf.chunk.js.LICENSE.txt",
+    "static/js/2.d148c886.chunk.js.LICENSE.txt": "/likewater-frontend/static/js/2.d148c886.chunk.js.LICENSE.txt",
     "static/media/alarm-warning-fill.svg": "/likewater-frontend/static/media/alarm-warning-fill.672b5640.svg",
     "static/media/semantic.min.css": "/likewater-frontend/static/media/outline-icons.ef60a4f6.woff",
     "static/media/broadcast-fill.svg": "/likewater-frontend/static/media/broadcast-fill.9172578d.svg",
@@ -30,10 +30,10 @@
     "static/media/remixicon.css": "/likewater-frontend/static/media/remixicon.9915fef9.woff2"
   },
   "entrypoints": [
-    "static/js/runtime-main.85af7c52.js",
+    "static/js/runtime-main.9ee12c75.js",
     "static/css/2.cf4ecf51.chunk.css",
-    "static/js/2.067996bf.chunk.js",
+    "static/js/2.d148c886.chunk.js",
     "static/css/main.88946a4f.chunk.css",
-    "static/js/main.53e5673c.chunk.js"
+    "static/js/main.7e436c69.chunk.js"
   ]
 }

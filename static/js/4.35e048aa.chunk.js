@@ -1,2 +1,0 @@
-(this.webpackJsonplikewater=this.webpackJsonplikewater||[]).push([[4],{402:function(e,t,n){"use strict";function r(e){if(null==e)throw new TypeError("Cannot destructure undefined")}n.d(t,"a",(function(){return r}))},405:function(e,t,n){"use strict";n.r(t);var r=n(402),i=n(0),a=n.n(i),u=n(401);t.default=function(e){return Object(r.a)(e),a.a.createElement(u.a,{raised:!0,inverted:!0,style:{padding:8,paddingBottom:44}},a.a.createElement("div",{style:{height:200}}))}}}]);
-//# sourceMappingURL=4.35e048aa.chunk.js.map
