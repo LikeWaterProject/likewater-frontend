@@ -2,11 +2,11 @@ import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 
 import eventsReducer from "./eventsReducer";
-import preferencesReducer from "./preferencesReducer";
+import mapReducer from "./mapReducer";
 
 const rootReducer = combineReducers({
   events: eventsReducer,
-  preferences: preferencesReducer,
+  map: mapReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

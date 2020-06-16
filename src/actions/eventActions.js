@@ -1,10 +1,8 @@
+import { FETCH_EVENTS, FETCH_EVENT_DETAILS, SET_EVENT_FILTER } from ".";
 import API from "../api";
-import { FETCH_EVENTS, FETCH_EVENT_DETAILS } from ".";
 
-export const getEvents = (vicinity) => async (dispatch) => {
-  const { lat, lon, radius = 5000 } = vicinity;
-
-  const result = await API.post("/getevents", vicinity);
+export const getEvents = ({ lat, lon, radius = 5000 }) => async (dispatch) => {
+  const result = await API.post("/getevents", { lat, lon, radius });
   dispatch({
     type: FETCH_EVENTS,
     payload: result.data,
@@ -26,3 +24,10 @@ export const reportEvent = (report) => async (dispatch) => {
   });
 };
 
+export const setEventFilter = (filters = []) => {
+  localStorage.setItem(SET_EVENT_FILTER, JSON.stringify(filters));
+  return {
+    type: SET_EVENT_FILTER,
+    payload: filters,
+  };
+};

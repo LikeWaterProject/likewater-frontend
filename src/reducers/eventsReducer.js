@@ -1,8 +1,9 @@
-import { FETCH_EVENTS, FETCH_EVENT_DETAILS, UPDATE_EVENT } from "../actions";
+import { FETCH_EVENTS, SET_EVENT_FILTER, UPDATE_EVENT } from "../actions";
 
 const INITIAL_STATE = {
   dangerClose: false,
   nearbyEvents: [],
+  eventFilter: [],
 };
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -11,6 +12,11 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return {
         ...state,
         nearbyEvents: payload,
+      };
+    case SET_EVENT_FILTER:
+      return {
+        ...state,
+        eventFilter: payload,
       };
     default:
       return state;
