@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { useLocation, useHistory } from "react-router-dom";
 import { Header, Icon, Image, Menu, Segment, Sidebar } from "semantic-ui-react";
 
-import "./App.css";
 import MapView from "./MapView";
 import TopSheet from "./TopSheet";
 import BottomSheet from "./BottomSheet";
