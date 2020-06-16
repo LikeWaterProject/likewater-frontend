@@ -1,43 +1,47 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6e32f3d93067cddd117962a4120c194c",
+    "revision": "7fb6168e9df5eaf9f27059caf4350e47",
     "url": "/likewater-frontend/index.html"
   },
   {
-    "revision": "83fabd9660688a0564e9",
+    "revision": "89d43b938f0dbdc41c92",
     "url": "/likewater-frontend/static/css/2.cf4ecf51.chunk.css"
   },
   {
-    "revision": "d737a3d1347a6084f02f",
+    "revision": "651cb48775f1f0a651a4",
     "url": "/likewater-frontend/static/css/main.88946a4f.chunk.css"
   },
   {
-    "revision": "83fabd9660688a0564e9",
-    "url": "/likewater-frontend/static/js/2.d148c886.chunk.js"
+    "revision": "89d43b938f0dbdc41c92",
+    "url": "/likewater-frontend/static/js/2.8ee7a44e.chunk.js"
   },
   {
     "revision": "4d47ffde3dc69784e8e23fd910817ef8",
-    "url": "/likewater-frontend/static/js/2.d148c886.chunk.js.LICENSE.txt"
+    "url": "/likewater-frontend/static/js/2.8ee7a44e.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "536f80f00e8fdbbeefe6",
-    "url": "/likewater-frontend/static/js/3.c9b7961e.chunk.js"
+    "revision": "62668f9e9b246d99bd5e",
+    "url": "/likewater-frontend/static/js/3.c16dd795.chunk.js"
   },
   {
-    "revision": "c46ee5435f8ecfdabeb8",
-    "url": "/likewater-frontend/static/js/4.7d87073b.chunk.js"
+    "revision": "ef8855a9cee841da825f",
+    "url": "/likewater-frontend/static/js/4.0b983752.chunk.js"
   },
   {
-    "revision": "4ada3dd1cfaf939362d8",
-    "url": "/likewater-frontend/static/js/5.1ee04adb.chunk.js"
+    "revision": "7eb397ca9e0dadadd0ec",
+    "url": "/likewater-frontend/static/js/5.3a650d5f.chunk.js"
   },
   {
-    "revision": "d737a3d1347a6084f02f",
-    "url": "/likewater-frontend/static/js/main.7e436c69.chunk.js"
+    "revision": "074b58039934f6b8b063",
+    "url": "/likewater-frontend/static/js/6.50d1a2a8.chunk.js"
   },
   {
-    "revision": "ac51aa022d19b4b7ee51",
-    "url": "/likewater-frontend/static/js/runtime-main.9ee12c75.js"
+    "revision": "651cb48775f1f0a651a4",
+    "url": "/likewater-frontend/static/js/main.05af441d.chunk.js"
+  },
+  {
+    "revision": "fced097db117690e28aa",
+    "url": "/likewater-frontend/static/js/runtime-main.f8de2164.js"
   },
   {
     "revision": "672b564044b8227d97eaa01cfd2ed394",
