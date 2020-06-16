@@ -1,18 +1,31 @@
 import React, { useState } from "react";
-import { Segment, Search, Icon, Sidebar } from "semantic-ui-react";
+import { Segment, Search, Sidebar, Input } from "semantic-ui-react";
 
 const TopSheet = ({ visible }) => {
+  const [query, setQuery] = useState("");
+
   return (
     <Sidebar
       as={Segment}
       inverted
       raised
       direction="top"
-      animation="overlay"
+      animation="push"
       textAlign="center"
-      visible={visible}
+      visible
     >
-      <Search />
+      {/* <Input
+      fluid
+      icon="search"
+      placeholder="Search..."
+      value={query}
+      onChange={(event, { value }) => setQuery(value)}
+    /> */}
+      <Search
+        value={query}
+        onSearchChange={(event, { value }) => setQuery(value)}
+        open={false}
+      />
     </Sidebar>
   );
 };

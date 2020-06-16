@@ -1,83 +1,58 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { useLocation, useHistory } from "react-router-dom";
-import { Header, Icon, Image, Menu, Segment, Sidebar } from "semantic-ui-react";
+import { useGeolocation } from "react-use";
+import { Sidebar } from "semantic-ui-react";
 
 import MapView from "./MapView";
 import TopSheet from "./TopSheet";
 import BottomSheet from "./BottomSheet";
+import { setCurrentPosition } from "../actions";
 
-const App = ({ events, preferences }) => {
-  const [position, setPosition] = useState(preferences.defaultPosition);
-  const [controlsVisible, setControlsVisible] = useState(true);
-  const [isDragging, setDragging] = useState(false);
-  const location = useLocation();
-  const history = useHistory();
-  const menuItems = useMemo(
-    () => [
-      {
-        key: "nearby",
-        name: "Nearby",
-        path: "/nearby",
-        active: location.pathname === "/nearby",
-      },
-      {
-        key: "report",
-        name: "Report",
-        path: "/report",
-        active: location.pathname === "/report",
-      },
-      {
-        key: "sos",
-        name: "SOS",
-        path: "/sos",
-        active: location.pathname === "/sos",
-      },
-    ],
-    [location]
-  );
+const App = ({ events, map, setCurrentPosition }) => {
+  const { currentPosition } = map;
+  const location = useGeolocation({
+    enableHighAccuracy: false,
+    maximumAge: 15000,
+    timeout: 30000,
+  });
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (geolocationPosition) => {
-        const {
-          coords: { longitude, latitude },
-        } = geolocationPosition;
-        setPosition([longitude, latitude]);
-      },
-      console.error,
-      { enableHighAccuracy: false, maximumAge: 15000, timeout: 30000 }
-    );
-  }, []);
+    if (!location.loading && location.longitude) {
+      setCurrentPosition(location);
+    }
+  }, [location]);
 
-  const handleMenuItemClick = (event, data) => {
-    const { path } = data;
-    setControlsVisible(true);
-    history.push(path);
+  const [controlsVisible, setControlsVisible] = useState(true);
+
+  const handleMapMove = (mapEvent) => {
+    const { lng: lon, lat } = mapEvent.getCenter();
+    // setMapPosition([lon, lat]);
+  };
+
+  const handleMapContextMenu = (mapEvent) => {
+    console.log(mapEvent);
+  };
+
+  const handleToggleControls = (visible) => {
+    if (typeof visible === "boolean") return setControlsVisible(visible);
+    setControlsVisible((v) => !v);
   };
 
   return (
     <>
       <Sidebar.Pushable className="no-overflow">
-        <TopSheet visible={controlsVisible && !isDragging} />
-        <BottomSheet visible={controlsVisible && !isDragging} />
+        <TopSheet visible={controlsVisible} />
+        <BottomSheet visible={controlsVisible} />
         <Sidebar.Pusher>
           <MapView
-            position={position}
-            onDrag={setDragging}
-            onDismiss={() => setControlsVisible((v) => !v)}
+            center={currentPosition ?? map.defaultPosition}
+            position={currentPosition}
+            onMoveEnd={handleMapMove}
+            toggleControls={handleToggleControls}
+            onContextMenu={handleMapContextMenu}
           />
         </Sidebar.Pusher>
       </Sidebar.Pushable>
-      <Menu
-        pointing
-        inverted
-        fixed="bottom"
-        size="large"
-        widths={3}
-        onItemClick={handleMenuItemClick}
-        items={menuItems}
-      />
     </>
   );
 };
@@ -85,8 +60,8 @@ const App = ({ events, preferences }) => {
 const mapStateToProps = (state) => {
   return {
     events: state.events,
-    preferences: state.preferences,
+    map: state.map,
   };
 };
 
-export default connect(mapStateToProps, {})(App);
+export default connect(mapStateToProps, { setCurrentPosition })(App);

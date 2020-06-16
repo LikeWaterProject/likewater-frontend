@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Segment, Icon, Image, List } from "semantic-ui-react";
+import { Segment, Header, Icon, Image, List } from "semantic-ui-react";
 
 const sampleEvents = [
   {
@@ -7,32 +7,32 @@ const sampleEvents = [
     description: "",
     distance: 250,
     lastActive: "Just now",
-    icon: "medkit",
-    color: "red",
+    icon: "first-aid-kit",
+    color: "gainsboro",
   },
   {
     type: "Rally Point",
     description: "",
     distance: 475,
     lastActive: "4 minutes ago",
-    icon: "bullhorn",
-    color: "green",
+    icon: "broadcast",
+    color: "mediumseagreen",
   },
   {
     type: "Police Barricade",
     description: "",
     distance: 960,
     lastActive: "2 minutes ago",
-    icon: "shield",
-    color: "blue",
+    icon: "alarm-warning",
+    color: "royalblue",
   },
   {
     type: "Police Arrests",
     description: "",
     distance: 1235,
     lastActive: "11 minutes ago",
-    icon: "shield",
-    color: "blue",
+    icon: "alarm-warning",
+    color: "royalblue",
   },
   {
     type: "Looting",
@@ -40,7 +40,7 @@ const sampleEvents = [
     distance: 1405,
     lastActive: "7 minutes ago",
     icon: "fire",
-    color: "orange",
+    color: "darkorange",
   },
 ];
 
@@ -50,8 +50,11 @@ const EventList = ({ events }) => {
       sampleEvents.map((event, index) => (
         <List.Item key={index}>
           <List.Content floated="right">{event.lastActive}</List.Content>
-          <List.Content floated="left" verticalAlign="middle">
-            <Icon size="large" color={event.color} name={event.icon} />
+          <List.Content floated="left" style={{ paddingTop: 8 }}>
+            <i
+              className={`ri-${event.icon}-fill ri-xl`}
+              style={{ color: event.color }}
+            />
           </List.Content>
           <List.Content>
             <List.Header>{event.type}</List.Header>
@@ -65,9 +68,12 @@ const EventList = ({ events }) => {
   );
 
   return (
-    <List inverted relaxed divided selection verticalAlign="middle">
-      {listItems}
-    </List>
+    <Segment raised inverted style={{ padding: 16 }}>
+      <Header inverted as="h3">Nearby events</Header>
+      <List inverted relaxed divided selection verticalAlign="middle">
+        {listItems}
+      </List>
+    </Segment>
   );
 };
 
