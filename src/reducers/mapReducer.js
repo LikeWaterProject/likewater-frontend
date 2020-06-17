@@ -6,7 +6,7 @@ import {
 
 const INITIAL_STATE = {
   markerPosition: null,
-  currentPositon: null,
+  currentPosition: null,
   defaultPosition: JSON.parse(localStorage.getItem(SET_DEFAULT_POSITION)) ?? [
     -74.0,
     40.73,
@@ -25,7 +25,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case SET_CURRENT_POSITION:
       return {
         ...state,
-        currentPositon: payload,
+        currentPosition: payload,
       };
     case SET_DEFAULT_POSITION:
       return {
