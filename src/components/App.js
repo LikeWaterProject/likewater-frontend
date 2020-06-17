@@ -8,8 +8,7 @@ import TopSheet from "./TopSheet";
 import BottomSheet from "./BottomSheet";
 import { setCurrentPosition } from "../actions";
 
-const App = ({ events, map, setCurrentPosition }) => {
-  const { currentPosition } = map;
+const App = ({ setCurrentPosition }) => {
   const location = useGeolocation({
     enableHighAccuracy: false,
     maximumAge: 15000,
@@ -20,7 +19,7 @@ const App = ({ events, map, setCurrentPosition }) => {
     if (!location.loading && location.longitude) {
       setCurrentPosition(location);
     }
-  }, [location]);
+  }, [location, setCurrentPosition]);
 
   const [controlsVisible, setControlsVisible] = useState(true);
 
@@ -45,8 +44,6 @@ const App = ({ events, map, setCurrentPosition }) => {
         <BottomSheet visible={controlsVisible} />
         <Sidebar.Pusher>
           <MapView
-            center={currentPosition ?? map.defaultPosition}
-            position={currentPosition}
             onMoveEnd={handleMapMove}
             toggleControls={handleToggleControls}
             onContextMenu={handleMapContextMenu}
@@ -57,11 +54,4 @@ const App = ({ events, map, setCurrentPosition }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    events: state.events,
-    map: state.map,
-  };
-};
-
-export default connect(mapStateToProps, { setCurrentPosition })(App);
+export default connect(null, { setCurrentPosition })(App);
