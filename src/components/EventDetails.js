@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { getDistance } from "geolib";
-import { Segment, Header, Item } from "semantic-ui-react";
+import { Segment, Header, Item, Button } from "semantic-ui-react";
 
 import API from "../api";
 import { mapEvents } from "../hooks";
 import LoadingPanel from "./LoadingPanel";
 
 const EventDetails = ({ map }) => {
-  console.log(map);
   const { currentPosition } = map;
   const [event, setEvent] = useState();
-  // const displayEvent = useEvents([event])[0];
-  console.log(event);
+  const history = useHistory();
 
   useEffect(() => {
     const load = async () => {
@@ -34,45 +33,40 @@ const EventDetails = ({ map }) => {
     load();
   }, []);
 
-  console.log(currentPosition, event?.coordinates);
-  currentPosition &&
-    console.log(
-      `${getDistance(event?.coordinates, {
-        lon: currentPosition[0],
-        lat: currentPosition[1],
-      })}m`
-    );
+  const handleBackPressed = () => {
+    history.push("/");
+  }
 
   return (
     <Segment raised inverted style={{ padding: 16 }}>
       {event ? (
-        <>
-          <Header inverted as="h3">
+        <Item>
+          <Item.Header as="h3" className="panel-header">
+            <button style={{ border: "none", backgroundColor: "transparent", textAlign: "center", color: "white" }} onClick={handleBackPressed}><i className="ri-arrow-left-line panel-icon" /></button>
+            {/* <Button basic inverted secondary circular className="ri-arrow-left-line" /> */}
             {event?.eventType}
-          </Header>
-          <Item>
-            <Item.Image>
-              {" "}
+          </Item.Header>
+          {/* <Item.Image>
               <i
                 className={`ri-${event?.icon}-fill ri-xl`}
                 style={{ color: event?.color }}
               />
-            </Item.Image>
-            <Item.Content>
-              <Item.Meta>{event?.eventDesc}</Item.Meta>
-              <Item.Description>
-                {currentPosition &&
-                  `${getDistance(event?.coordinates, {
-                    lon: currentPosition[0],
-                    lat: currentPosition[1],
-                  })}m`}
-              </Item.Description>
-              <Item.Extra>
-                {new Date(parseInt(event?.reportedDt)).toISOString()}
-              </Item.Extra>
-            </Item.Content>
-          </Item>
-        </>
+            </Item.Image> */}
+          <Item.Content>
+            <Item.Description>
+              {currentPosition &&
+                event &&
+                `${getDistance(event?.coordinates, {
+                  lon: currentPosition.longitude,
+                  lat: currentPosition.latitude,
+                })}m`}
+            </Item.Description>
+            <Item.Meta>{event?.eventDesc}</Item.Meta>
+            <Item.Extra>
+              {new Date(parseInt(event?.reportedDt)).toISOString()}
+            </Item.Extra>
+          </Item.Content>
+        </Item>
       ) : (
         <LoadingPanel />
       )}
