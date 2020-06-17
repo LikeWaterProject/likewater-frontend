@@ -21,6 +21,7 @@ import positionAsset from "../assets/focus-3-line.svg";
 const Mapbox = ReactMapboxGl({
   accessToken:
     "pk.eyJ1IjoicmVrdGRlY2thcmQiLCJhIjoiY2theWJ4OXM0MGhiejJ3cnkzcmk0andiYyJ9.IinlG0vyUvcWhvlAREJXeA",
+  attributionControl: false,
 });
 
 const pinIcon = new Image(24, 24);
@@ -65,16 +66,16 @@ const data = [
   },
 ];
 
-const MapView = ({
-  center,
-  onMoveEnd,
-  toggleControls,
-  map,
-  setMarkerPosition,
-}) => {
+const MapView = ({ onMoveEnd, toggleControls, map, setMarkerPosition }) => {
   const history = useHistory();
   const { width, height } = useWindowSize();
-  const { markerPosition, showVolumetricBuildings, showBasicMapFeatures } = map;
+  const {
+    currentPosition,
+    defaultPosition,
+    markerPosition,
+    showVolumetricBuildings,
+    showBasicMapFeatures,
+  } = map;
 
   const initializeMap = (map) => {
     map.on("click", ({ originalEvent }) => {
@@ -116,8 +117,8 @@ const MapView = ({
   );
 
   const handleAddMarker = (map, mapEvent) => {
+    if (map.isMoving() || map.isRotating() || map.isZooming()) return;
     const { lat, lng } = mapEvent.lngLat;
-    mapEvent.originalEvent.preventDefault();
     toggleControls(true);
     setMarkerPosition([lng, lat]);
     map.flyTo({ center: [lng, lat], zoom: 16 });
@@ -129,89 +130,96 @@ const MapView = ({
     delay: 500,
   });
 
-  const handleMapMoved = (map, mapEvent) => {
-    // console.log(mapEvent);
-    /* eslint-disable no-unused-expressions */
-    mapEvent.originalEvent?.preventDefault?.();
-    onMoveEnd(map);
-  };
+  // const handleMapMoved = (map, mapEvent) => {
+  //   // console.log(mapEvent);
+  //   /* eslint-disable no-unused-expressions */
+  //   mapEvent.originalEvent?.preventDefault?.();
+  //   onMoveEnd(map);
+  // };
 
   return (
-    <div style={{ width, height }}>
-      <Mapbox
-        style="mapbox://styles/rektdeckard/ckayd52rb0xzg1imcbyek0g4y"
-        center={center}
-        zoom={MAP_DEFAULTS.defaultZoom}
-        containerStyle={{
-          height: "100%",
-          width: "100%",
-        }}
-        onStyleLoad={initializeMap}
-        onMoveEnd={handleMapMoved}
-        onContextMenu={handleAddMarker}
-        {...longPressEvent}
-      >
-        <Pin id="police" data={policeIcon} />
-        <Pin id="pin" data={pinIcon} />
-        <Pin id="fire" data={fireIcon} />
-        <Pin id="medical" data={medicalIcon} />
-        <Pin id="info" data={infoIcon} />
-        <Pin id="position" data={positionIcon} />
+    <Mapbox
+      style="mapbox://styles/rektdeckard/ckayd52rb0xzg1imcbyek0g4y"
+      center={
+        currentPosition
+          ? [currentPosition.longitude, currentPosition.latitude]
+          : defaultPosition
+      }
+      zoom={MAP_DEFAULTS.defaultZoom}
+      containerStyle={{
+        width,
+        height,
+      }}
+      onStyleLoad={initializeMap}
+      // onMoveEnd={handleMapMoved}
+      onContextMenu={handleAddMarker}
+      {...longPressEvent}
+    >
+      <Pin id="police" data={policeIcon} />
+      <Pin id="pin" data={pinIcon} />
+      <Pin id="fire" data={fireIcon} />
+      <Pin id="medical" data={medicalIcon} />
+      <Pin id="info" data={infoIcon} />
+      <Pin id="position" data={positionIcon} />
 
-        {showVolumetricBuildings && (
-          <Layer
-            id="3d-buildings"
-            type="fill-extrusion"
-            sourceId="composite"
-            sourceLayer="building"
-            filter={["==", "extrude", "true"]}
-            minZoom={14}
-            paint={MAP_DEFAULTS.volumetricPainter}
-          />
-        )}
-        {markerPosition && (
-          <Layer
-            id="map-marker"
-            type="symbol"
-            layout={{
-              "icon-image": "pin",
-              "icon-anchor": "bottom",
-              "icon-allow-overlap": true,
-            }}
-          >
-            <Feature coordinates={markerPosition} />
-          </Layer>
-        )}
+      {showVolumetricBuildings && (
         <Layer
-          id="event-markers"
+          id="3d-buildings"
+          type="fill-extrusion"
+          sourceId="composite"
+          sourceLayer="building"
+          filter={["==", "extrude", "true"]}
+          minZoom={14}
+          paint={MAP_DEFAULTS.volumetricPainter}
+        />
+      )}
+      {markerPosition && (
+        <Layer
+          id="map-marker"
           type="symbol"
-          layout={{ "icon-image": "info", "icon-allow-overlap": true }}
-          // images={["test", image]}
+          layout={{
+            "icon-image": "pin",
+            "icon-anchor": "bottom",
+            "icon-allow-overlap": true,
+          }}
         >
-          {data.map((evt) => {
-            const {
-              eventId,
-              coordinates: { lon, lat },
-            } = evt;
-            return (
-              <Feature
-                key={eventId}
-                coordinates={[lon, lat]}
-                properties={evt}
-                {...onMouseEvents}
-              />
-            );
-          })}
+          <Feature coordinates={markerPosition} />
         </Layer>
+      )}
+      <Layer
+        id="event-markers"
+        type="symbol"
+        layout={{ "icon-image": "info", "icon-allow-overlap": true }}
+        // images={["test", image]}
+      >
+        {data.map((evt) => {
+          const {
+            eventId,
+            coordinates: { lon, lat },
+          } = evt;
+          return (
+            <Feature
+              key={eventId}
+              coordinates={[lon, lat]}
+              properties={evt}
+              {...onMouseEvents}
+            />
+          );
+        })}
+      </Layer>
+      {currentPosition && (
         <Layer
           id="location-marker"
           type="symbol"
           layout={{ "icon-image": "position", "icon-allow-overlap": true }}
         >
-          <Feature coordinates={center} properties={{ coordinates: center }} />
+          <Feature
+            coordinates={[currentPosition.longitude, currentPosition.latitude]}
+            properties={currentPosition}
+          />
         </Layer>
-      </Mapbox>
-    </div>
+      )}
+    </Mapbox>
   );
 };
 
