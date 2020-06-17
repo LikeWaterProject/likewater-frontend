@@ -1,5 +1,13 @@
 import React, { useMemo } from "react";
-import { Segment, Header, Icon, Image, List } from "semantic-ui-react";
+import {
+  Segment,
+  Header,
+  Icon,
+  Image,
+  List,
+  Button,
+  Grid,
+} from "semantic-ui-react";
 
 const sampleEvents = [
   {
@@ -69,8 +77,23 @@ const EventList = ({ events }) => {
 
   return (
     <Segment raised inverted style={{ padding: 16 }}>
-      <Header inverted as="h3">Nearby events</Header>
-      <List inverted relaxed divided selection verticalAlign="middle">
+      <div className="panel-header">
+        <div className="panel-header-text">
+          <Header inverted as="h3">
+            Nearby events
+          </Header>
+        </div>
+        <div>
+          <Button size="tiny" inverted color="blue" circular>
+            <i className="ri-add-fill ri-sm" style={{ paddingRight: 4 }} />
+            Add
+          </Button>
+          <Button size="tiny" inverted circular>
+            Filter
+          </Button>
+        </div>
+      </div>
+      <List inverted divided selection verticalAlign="middle">
         {listItems}
       </List>
     </Segment>
