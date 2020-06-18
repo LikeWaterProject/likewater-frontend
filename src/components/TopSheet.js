@@ -1,7 +1,14 @@
 import React, { useState } from "react";
-import { Segment, Search, Sidebar, Input } from "semantic-ui-react";
+import {
+  Segment,
+  Menu,
+  Search,
+  Sidebar,
+  Input,
+  Button,
+} from "semantic-ui-react";
 
-const TopSheet = ({ visible }) => {
+const TopSheet = ({ visible, toggleControls }) => {
   const [query, setQuery] = useState("");
 
   return (
@@ -12,20 +19,27 @@ const TopSheet = ({ visible }) => {
       direction="top"
       animation="push"
       textAlign="center"
-      visible={visible}
+      visible
+      style={{ padding: 4 }}
     >
-      {/* <Input
-      fluid
-      icon="search"
-      placeholder="Search..."
-      value={query}
-      onChange={(event, { value }) => setQuery(value)}
-    /> */}
-      <Search
-        value={query}
-        onSearchChange={(event, { value }) => setQuery(value)}
-        open={false}
-      />
+      <Menu inverted borderless widths={3}>
+        <Menu.Item> </Menu.Item>
+        <Menu.Item fitted>
+          <Search
+            disabled
+            value={query}
+            onSearchChange={(event, { value }) => setQuery(value)}
+            onFocus={() => toggleControls(false)}
+            onBlur={() => toggleControls(true)}
+            open={false}
+          />
+        </Menu.Item>
+        <Menu.Menu position="right">
+          <Menu.Item>
+            <Button circular size="large" color="black" icon="setting" floated="right" />
+          </Menu.Item>
+        </Menu.Menu>
+      </Menu>
     </Sidebar>
   );
 };

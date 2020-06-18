@@ -33,7 +33,10 @@ const App = ({ shouldUseGeolocation, initializeGeolocation }) => {
     <>
       {shouldUseGeolocation && <Geolocator />}
       <Sidebar.Pushable className="no-overflow">
-        <TopSheet visible={controlsVisible} />
+        <TopSheet
+          visible={controlsVisible}
+          toggleControls={handleToggleControls}
+        />
         <BottomSheet visible={controlsVisible} />
         <Sidebar.Pusher>
           <MapView

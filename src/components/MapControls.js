@@ -26,12 +26,12 @@ const MapControls = ({ context, shouldUseGeolocation, setUseGeolocation }) => {
       <Button
         icon="location arrow"
         color="black"
-        style={{ position: "absolute", top: 108, right: 3 }}
+        style={{ position: "absolute", top: 98, right: 3 }}
         onClick={handleReorient}
       />
       <Button.Group
         vertical
-        style={{ position: "absolute", top: 152, right: 6 }}
+        style={{ position: "absolute", top: 142, right: 6 }}
       >
         <Button color="black" icon="plus" onClick={handleZoomIn} />
         <Button color="black" icon="minus" onClick={handleZoomOut} />
@@ -39,7 +39,7 @@ const MapControls = ({ context, shouldUseGeolocation, setUseGeolocation }) => {
       <Button
         color={shouldUseGeolocation ? "blue" : "black"}
         icon="crosshairs"
-        style={{ position: "absolute", top: 232, right: 3 }}
+        style={{ position: "absolute", top: 222, right: 3 }}
         onClick={handleShouldUseGeolocation}
       />
     </div>
