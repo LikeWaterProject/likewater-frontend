@@ -2,6 +2,7 @@ import {
   SET_DEFAULT_POSITION,
   SET_CURRENT_POSITION,
   SET_MARKER_POSITION,
+  SET_USE_GEOLOCATION,
 } from "../actions";
 
 const INITIAL_STATE = {
@@ -11,6 +12,7 @@ const INITIAL_STATE = {
     -74.0,
     40.73,
   ],
+  shouldUseGeolocation: false,
   showBasicMapFeatures: true,
   showVolumetricBuildings: true,
 };
@@ -31,6 +33,11 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return {
         ...state,
         defaultPosition: payload,
+      };
+    case SET_USE_GEOLOCATION:
+      return {
+        ...state,
+        shouldUseGeolocation: payload,
       };
     default:
       return state;
