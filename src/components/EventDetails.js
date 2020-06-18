@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { getDistance } from "geolib";
 import { Segment, Header, Item, Button } from "semantic-ui-react";
 
@@ -10,39 +10,52 @@ import LoadingPanel from "./LoadingPanel";
 
 const EventDetails = ({ map }) => {
   const { currentPosition } = map;
+  const [loading, setLoading] = useState(false);
   const [event, setEvent] = useState();
   const history = useHistory();
+  const { id } = useParams();
 
   useEffect(() => {
     const load = async () => {
+      setLoading(true);
       try {
         const result = await API.post(
           "/vieweventdetails",
-          {
-            eventId: "D0B83D0C-0C96-46F5-8313-40FA9C6AA1D6",
-          },
+          { eventId: id },
           { crossDomain: true }
         );
         console.log(result);
         setEvent(mapEvents([result.data])[0]);
       } catch (e) {
         console.error(e);
+      } finally {
+        setLoading(false);
       }
     };
 
     load();
-  }, []);
+  }, [id]);
 
   const handleBackPressed = () => {
     history.push("/");
-  }
+  };
 
   return (
     <Segment raised inverted style={{ padding: 16 }}>
       {event ? (
         <Item>
           <Item.Header as="h3" className="panel-header">
-            <button style={{ border: "none", backgroundColor: "transparent", textAlign: "center", color: "white" }} onClick={handleBackPressed}><i className="ri-arrow-left-line panel-icon" /></button>
+            <button
+              style={{
+                border: "none",
+                backgroundColor: "transparent",
+                textAlign: "center",
+                color: "white",
+              }}
+              onClick={handleBackPressed}
+            >
+              <i className="ri-arrow-left-line panel-icon" />
+            </button>
             {/* <Button basic inverted secondary circular className="ri-arrow-left-line" /> */}
             {event?.eventType}
           </Item.Header>
