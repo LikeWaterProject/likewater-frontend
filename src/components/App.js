@@ -1,27 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { useGeolocation } from "react-use";
 import { Sidebar } from "semantic-ui-react";
 
+import { initializeGeolocation } from "../actions";
+import Geolocator from "./Geolocator";
 import MapView from "./MapView";
 import TopSheet from "./TopSheet";
 import BottomSheet from "./BottomSheet";
-import { setCurrentPosition } from "../actions";
 
-const App = ({ setCurrentPosition }) => {
-  const location = useGeolocation({
-    enableHighAccuracy: false,
-    maximumAge: 15000,
-    timeout: 30000,
-  });
+const App = ({ shouldUseGeolocation, initializeGeolocation }) => {
+  const [controlsVisible, setControlsVisible] = useState(true);
 
   useEffect(() => {
-    if (!location.loading && location.longitude) {
-      setCurrentPosition(location);
-    }
-  }, [location, setCurrentPosition]);
-
-  const [controlsVisible, setControlsVisible] = useState(true);
+    initializeGeolocation();
+  }, []);
 
   const handleMapMove = (mapEvent) => {
     const { lng: lon, lat } = mapEvent.getCenter();
@@ -39,6 +31,7 @@ const App = ({ setCurrentPosition }) => {
 
   return (
     <>
+      {shouldUseGeolocation && <Geolocator />}
       <Sidebar.Pushable className="no-overflow">
         <TopSheet visible={controlsVisible} />
         <BottomSheet visible={controlsVisible} />
@@ -54,4 +47,8 @@ const App = ({ setCurrentPosition }) => {
   );
 };
 
-export default connect(null, { setCurrentPosition })(App);
+const mapStateToProps = (state) => {
+  return { shouldUseGeolocation: state.map.shouldUseGeolocation };
+};
+
+export default connect(mapStateToProps, { initializeGeolocation })(App);
