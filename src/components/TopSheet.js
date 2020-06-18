@@ -12,7 +12,7 @@ const TopSheet = ({ visible }) => {
       direction="top"
       animation="push"
       textAlign="center"
-      visible
+      visible={visible}
     >
       {/* <Input
       fluid
