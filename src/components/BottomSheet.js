@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { withRouter, Switch, Route } from "react-router-dom";
-import { Sidebar } from "semantic-ui-react";
+import { Sidebar, Button } from "semantic-ui-react";
 
 import LoadingPanel from "./LoadingPanel";
 
@@ -10,19 +10,29 @@ const EventDetails = React.lazy(() => import("./EventDetails"));
 const EventSubmit = React.lazy(() => import("./EventSubmit"));
 
 const BottomSheet = ({ visible }) => {
+  // TODO: implement instant submission of high-priotiry SOS event
+  const handleSOS = () => window.confirm("Send SOS?");
+
   return (
     <Sidebar
       className="no-overflow"
       animation="push"
       direction="bottom"
       visible={visible}
+      style={{ boxShadow: "none" }}
     >
+      <div style={{ textAlign: "right" }}>
+        <Button
+          circular
+          compact
+          color="black"
+          size="huge"
+          icon="bullhorn"
+          onClick={handleSOS}
+        ></Button>
+      </div>
       <Switch>
-        <Route exact path="/">
-          <Suspense fallback={Loader}>
-            <EventList />
-          </Suspense>
-        </Route>
+       
         <Route path="/events/:id">
           <Suspense fallback={Loader}>
             <EventDetails />
@@ -33,11 +43,13 @@ const BottomSheet = ({ visible }) => {
             <EventSubmit />
           </Suspense>
         </Route>
-        <Route exact path="/report">
-          <LoadingPanel />
-        </Route>
         <Route exact path="/sos">
           <LoadingPanel />
+        </Route>
+        <Route>
+          <Suspense fallback={Loader}>
+            <EventList />
+          </Suspense>
         </Route>
       </Switch>
     </Sidebar>
