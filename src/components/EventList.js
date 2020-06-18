@@ -1,63 +1,94 @@
 import React, { useMemo } from "react";
-import {
-  Segment,
-  Header,
-  Icon,
-  Image,
-  List,
-  Button,
-  Grid,
-} from "semantic-ui-react";
+import { useHistory } from "react-router-dom";
+import { formatDistance } from "date-fns";
+import { Segment, Header, List, Button } from "semantic-ui-react";
+import { getDistance } from "geolib";
+
+import { useEvents } from "../hooks";
 
 const sampleEvents = [
   {
-    type: "Water Distribution",
-    description: "",
-    distance: 250,
-    lastActive: "Just now",
-    icon: "first-aid-kit",
-    color: "gainsboro",
+    eventId: "0B479F98-12D1-49C5-9A5A-28E8BAC9E420",
+    eventType: "police",
+    eventDesc: "Beating at 12th and Lexington",
+    userToken: "User98765",
+    reportedDt: 1592356915877,
+    confirms: 3,
+    dismisses: 1,
+    coordinates: {
+      lat: 41,
+      lon: -74,
+    },
   },
   {
-    type: "Rally Point",
-    description: "",
-    distance: 475,
-    lastActive: "4 minutes ago",
-    icon: "broadcast",
-    color: "mediumseagreen",
+    eventId: "0FF83A5F-EA8F-462C-AD8E-81BB704ED4FC",
+    eventType: "aid",
+    eventDesc: "Water bottles and eye-wash station",
+    userToken: "User1111",
+    reportedDt: 1592430145773,
+    confirms: 0,
+    dismisses: 0,
+    coordinates: {
+      lat: 40.6911,
+      lon: -74.00348,
+    },
   },
   {
-    type: "Police Barricade",
-    description: "",
-    distance: 960,
-    lastActive: "2 minutes ago",
-    icon: "alarm-warning",
-    color: "royalblue",
+    eventId: "582276B6-65C8-4FAE-B7D6-27CD1F9EB19D",
+    eventType: "info",
+    userToken: "User1111",
+    eventDesc: "Rally Point",
+    reportedDt: 1592356992014,
+    confirms: 3,
+    dismisses: 1,
+    coordinates: {
+      lat: 40.695103,
+      lon: -73.984165,
+    },
   },
   {
-    type: "Police Arrests",
-    description: "",
-    distance: 1235,
-    lastActive: "11 minutes ago",
-    icon: "alarm-warning",
-    color: "royalblue",
+    eventId: "04E9E828-EFF3-4144-A875-39AC87179B66",
+    eventType: "info",
+    userToken: "User123456",
+    eventDesc: "Extra Masks",
+    reportedDt: 1592430500012,
+    confirms: 3,
+    dismisses: 1,
+    coordinates: {
+      lat: 40.694794,
+      lon: -73.981783,
+    },
   },
   {
-    type: "Looting",
-    description: "",
-    distance: 1405,
-    lastActive: "7 minutes ago",
-    icon: "fire",
-    color: "darkorange",
+    eventId: "F176598B-A4E1-4E14-A3A3-6C0E2AAED664",
+    eventType: "safety",
+    userToken: "User123456",
+    eventDesc: "Looting",
+    reportedDt: 1592430500012,
+    confirms: 2,
+    dismisses: 0,
+    coordinates: {
+      lat: 40.693257,
+      lon: -73.983478,
+    },
   },
 ];
 
 const EventList = ({ events }) => {
+  const history = useHistory();
+  const displayEvents = useEvents(sampleEvents);
+
+  const handleItemClick = (id) => {
+    history.push(`/events/${id}`);
+  };
+
   const listItems = useMemo(
     () =>
-      sampleEvents.map((event, index) => (
-        <List.Item key={index}>
-          <List.Content floated="right">{event.lastActive}</List.Content>
+      displayEvents.map((event, index) => (
+        <List.Item key={index} onClick={() => handleItemClick(event.eventId)}>
+          <List.Content floated="right">
+            {formatDistance(event.reportedDt, Date.now(), { addSuffix: true })}
+          </List.Content>
           <List.Content floated="left" style={{ paddingTop: 8 }}>
             <i
               className={`ri-${event.icon}-fill ri-xl`}
@@ -65,9 +96,13 @@ const EventList = ({ events }) => {
             />
           </List.Content>
           <List.Content>
-            <List.Header>{event.type}</List.Header>
+            <List.Header>{event.eventDesc}</List.Header>
             <List.Description>
-              <b>{event.distance}ft</b>
+              <b>{`${getDistance(
+                { lat: 40.671613, lon: -73.951909 },
+                event.coordinates,
+                5
+              )}ft`}</b>
             </List.Description>
           </List.Content>
         </List.Item>
@@ -84,11 +119,11 @@ const EventList = ({ events }) => {
           </Header>
         </div>
         <div>
-          <Button size="tiny" inverted color="blue" circular>
+          <Button size="small" inverted color="blue" circular>
             <i className="ri-add-fill ri-sm" style={{ paddingRight: 4 }} />
             Add
           </Button>
-          <Button size="tiny" inverted circular>
+          <Button size="small" inverted circular>
             Filter
           </Button>
         </div>
