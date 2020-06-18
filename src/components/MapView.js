@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useWindowSize } from "react-use";
 import ReactMapboxGl, {
+  MapContext,
   Layer,
   Feature,
-  Popup,
   Image as Pin,
 } from "react-mapbox-gl";
 
@@ -17,6 +17,7 @@ import fireAsset from "../assets/fire-fill.svg";
 import medicalAsset from "../assets/first-aid-kit-fill.svg";
 import infoAsset from "../assets/broadcast-fill.svg";
 import positionAsset from "../assets/focus-3-line.svg";
+import MapControls from "./MapControls";
 
 const Mapbox = ReactMapboxGl({
   accessToken:
@@ -55,14 +56,69 @@ const MAP_DEFAULTS = {
 
 const data = [
   {
-    eventId: "3A4221E1-9AD7-4296-863D-3B8F56E092C7",
-    eventType: "Riots",
-    userToken: "123423",
-    eventDesc: "Example Riot Event",
-    coordinates: { lat: 40.73663, lon: -73.99973 },
-    reportedDt: "12345",
+    eventId: "0B479F98-12D1-49C5-9A5A-28E8BAC9E420",
+    eventType: "police",
+    eventDesc: "Beating at 12th and Lexington",
+    userToken: "User98765",
+    reportedDt: 1592356915877,
+    confirms: 3,
+    dismisses: 1,
+    coordinates: {
+      lat: 41,
+      lon: -74,
+    },
+  },
+  {
+    eventId: "0FF83A5F-EA8F-462C-AD8E-81BB704ED4FC",
+    eventType: "aid",
+    eventDesc: "Water bottles and eye-wash station",
+    userToken: "User1111",
+    reportedDt: 1592430145773,
     confirms: 0,
     dismisses: 0,
+    coordinates: {
+      lat: 40.6911,
+      lon: -74.00348,
+    },
+  },
+  {
+    eventId: "582276B6-65C8-4FAE-B7D6-27CD1F9EB19D",
+    eventType: "info",
+    userToken: "User1111",
+    eventDesc: "Rally Point",
+    reportedDt: 1592356992014,
+    confirms: 3,
+    dismisses: 1,
+    coordinates: {
+      lat: 40.695103,
+      lon: -73.984165,
+    },
+  },
+  {
+    eventId: "04E9E828-EFF3-4144-A875-39AC87179B66",
+    eventType: "info",
+    userToken: "User123456",
+    eventDesc: "Extra Masks",
+    reportedDt: 1592430500012,
+    confirms: 3,
+    dismisses: 1,
+    coordinates: {
+      lat: 40.694794,
+      lon: -73.981783,
+    },
+  },
+  {
+    eventId: "F176598B-A4E1-4E14-A3A3-6C0E2AAED664",
+    eventType: "safety",
+    userToken: "User123456",
+    eventDesc: "Looting",
+    reportedDt: 1592430500012,
+    confirms: 2,
+    dismisses: 0,
+    coordinates: {
+      lat: 40.693257,
+      lon: -73.983478,
+    },
   },
 ];
 
@@ -151,8 +207,8 @@ const MapView = ({ onMoveEnd, toggleControls, map, setMarkerPosition }) => {
         height,
       }}
       onStyleLoad={initializeMap}
-      // onMoveEnd={handleMapMoved}
       onContextMenu={handleAddMarker}
+      // onMoveEnd={handleMapMoved}
       {...longPressEvent}
     >
       <Pin id="police" data={policeIcon} />
@@ -161,6 +217,10 @@ const MapView = ({ onMoveEnd, toggleControls, map, setMarkerPosition }) => {
       <Pin id="medical" data={medicalIcon} />
       <Pin id="info" data={infoIcon} />
       <Pin id="position" data={positionIcon} />
+
+      <MapContext.Consumer>
+        {(context) => <MapControls context={context} />}
+      </MapContext.Consumer>
 
       {showVolumetricBuildings && (
         <Layer
