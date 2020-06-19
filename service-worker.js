@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/likewater-frontend/precache-manifest.98fda067467cd276bb49b1438745bf2f.js"
+  "/likewater-frontend/precache-manifest.d2c1bee190f520960af5ea41667034da.js"
 );
 
 self.addEventListener('message', (event) => {
