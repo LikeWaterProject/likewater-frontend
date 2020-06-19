@@ -7,8 +7,7 @@ const isTouchEvent = (event) => {
 
 const preventDefault = (event) => {
   if (!isTouchEvent(event)) return;
-  console.log("useLongPress: preventing default");
-  if (event.touches.length < 2 && event.preventDefault) {
+  if (event.touches.length > 1 && event.preventDefault) {
     event.preventDefault && event.preventDefault();
   }
 };
@@ -23,15 +22,14 @@ export const useLongPress = (
   const start = useCallback(
     (map, event) => {
       const { originalEvent } = event;
-      // originalEvent.preventDefault();
       // prevent ghost click on mobile devices
       if (isPreventDefault && originalEvent.target) {
         originalEvent.target.addEventListener("touchend", preventDefault, {
-          passive: true,
+          passive: false,
         });
         target.current = originalEvent.target;
       }
-      if (originalEvent?.touches?.length < 2) {
+      if (originalEvent.touches.length < 2) {
         timeout.current = setTimeout(() => {
           callback(map, event);
         }, delay);
