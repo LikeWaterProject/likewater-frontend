@@ -82,6 +82,10 @@ const EventList = ({ events }) => {
     history.push(`/events/${id}`);
   };
 
+  const handleAddEvent = () => {
+    history.push("/submit");
+  };
+
   const listItems = useMemo(
     () =>
       displayEvents.map((event, index) => (
@@ -119,13 +123,17 @@ const EventList = ({ events }) => {
           </Header>
         </div>
         <div>
-          <Button size="small" inverted color="blue" circular>
+          <Button
+            size="small"
+            inverted
+            color="blue"
+            circular
+            onClick={handleAddEvent}
+          >
             <i className="ri-add-fill ri-sm" style={{ paddingRight: 4 }} />
             Add
           </Button>
-          <Button size="small" inverted circular>
-            Filter
-          </Button>
+          <Button size="small" inverted circular content="Filter" />
         </div>
       </div>
       <List inverted divided selection verticalAlign="middle">
