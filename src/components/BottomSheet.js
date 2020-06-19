@@ -15,7 +15,7 @@ const BottomSheet = ({ visible }) => {
 
   return (
     <Sidebar
-      className="no-overflow"
+      className="no-overflow unclickable"
       animation="push"
       direction="bottom"
       visible={visible}
@@ -23,6 +23,7 @@ const BottomSheet = ({ visible }) => {
     >
       <div style={{ textAlign: "right" }}>
         <Button
+          className="clickable"
           circular
           compact
           color="black"
@@ -32,7 +33,6 @@ const BottomSheet = ({ visible }) => {
         ></Button>
       </div>
       <Switch>
-       
         <Route path="/events/:id">
           <Suspense fallback={Loader}>
             <EventDetails />

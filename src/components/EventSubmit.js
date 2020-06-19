@@ -12,7 +12,12 @@ const sampleEvent = {
 
 const EventSubmit = ({}) => {
   return (
-    <Segment raised inverted style={{ padding: 16, height: 292 }}>
+    <Segment
+      className="clickable"
+      raised
+      inverted
+      style={{ padding: 16, height: 292 }}
+    >
       <Header inverted as="h3">
         Submit event
       </Header>

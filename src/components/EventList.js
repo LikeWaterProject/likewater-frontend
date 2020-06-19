@@ -111,7 +111,7 @@ const EventList = ({ events }) => {
   );
 
   return (
-    <Segment raised inverted style={{ padding: 16 }}>
+    <Segment className="clickable" raised inverted style={{ padding: 16 }}>
       <div className="panel-header">
         <div className="panel-header-text">
           <Header inverted as="h3">

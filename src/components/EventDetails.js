@@ -41,7 +41,7 @@ const EventDetails = ({ map }) => {
   };
 
   return (
-    <Segment raised inverted style={{ padding: 16 }}>
+    <Segment className="clickable" raised inverted style={{ padding: 16 }}>
       {event ? (
         <Item>
           <Item.Header as="h3" className="panel-header">

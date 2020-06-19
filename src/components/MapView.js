@@ -196,16 +196,16 @@ const MapView = ({ onMoveEnd, toggleControls, map, setMarkerPosition }) => {
   return (
     <Mapbox
       style="mapbox://styles/rektdeckard/ckayd52rb0xzg1imcbyek0g4y"
+      containerStyle={{
+        width,
+        height,
+      }}
       center={
         currentPosition
           ? [currentPosition.longitude, currentPosition.latitude]
           : defaultPosition
       }
       zoom={MAP_DEFAULTS.defaultZoom}
-      containerStyle={{
-        width,
-        height,
-      }}
       onStyleLoad={initializeMap}
       onContextMenu={handleAddMarker}
       // onMoveEnd={handleMapMoved}

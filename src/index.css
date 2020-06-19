@@ -21,3 +21,11 @@
   font-size: 1em;
   padding-right: 8px;
 }
+
+.clickable {
+  pointer-events: auto;
+}
+
+.unclickable {
+  pointer-events: none;
+}
