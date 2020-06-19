@@ -29,3 +29,26 @@
 .unclickable {
   pointer-events: none;
 }
+
+.aid {
+  color: gainsboro;
+}
+.sos {
+  color: crimson;
+}
+
+.info {
+  color: mediumseagreen;
+}
+
+.police {
+  color: royalblue;
+}
+
+.safety {
+  color: darkorange;
+}
+
+.generic {
+  color: mediumpurple;
+}
