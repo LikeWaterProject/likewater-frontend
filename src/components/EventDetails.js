@@ -16,6 +16,8 @@ const EventDetails = ({ map }) => {
   const { id } = useParams();
 
   useEffect(() => {
+    let isMounted = true;
+
     const load = async () => {
       setLoading(true);
       try {
@@ -24,16 +26,16 @@ const EventDetails = ({ map }) => {
           { eventId: id },
           { crossDomain: true }
         );
-        console.log(result);
-        setEvent(mapEvents([result.data])[0]);
+        isMounted && setEvent(mapEvents([result.data])[0]);
       } catch (e) {
         console.error(e);
       } finally {
-        setLoading(false);
+        isMounted && setLoading(false);
       }
     };
 
     load();
+    return () => (isMounted = false);
   }, [id]);
 
   const handleBackPressed = () => {

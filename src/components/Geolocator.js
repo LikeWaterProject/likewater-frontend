@@ -7,15 +7,17 @@ import { setCurrentPosition } from "../actions";
 const Geolocator = ({ setCurrentPosition }) => {
   const location = useGeolocation({
     enableHighAccuracy: true,
-    maximumAge: 15000,
+    maximumAge: 30000,
     timeout: 30000,
   });
 
   useEffect(() => {
-    console.log("GEOLOCATOR: update position");
+    let isMounted = true;
     if (!location.loading && location.longitude) {
-      setCurrentPosition(location);
+      isMounted && setCurrentPosition(location);
     }
+
+    return () => (isMounted = false);
   }, [location]);
 
   return null;
