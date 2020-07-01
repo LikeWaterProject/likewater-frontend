@@ -105,31 +105,43 @@ const EventSubmit = ({
         )}]`}</Header.Subheader>
       </Header>
       <Form inverted={inverted}>
-        {/* <Form.Group inline>
-          <label>Type</label>
-          <Button.Group compact color="black">
-            {options.map((option) => (
+        <div className="field">
+          <label>Category</label>
+          <div style={{ overflowX: "auto", whiteSpace: "nowrap" }}>
+            {options.map(({ value, text, icon }) => (
               <Button
-                active={category === option.value}
-                // inverted={category !== option.value}
-                // basic
-                // size="large"
-                // as={Button}
-                key={option.key}
-                onClick={() => setCategory(option.value)}
+                circular
+                toggle
+                inverted
+                size="tiny"
+                key={value}
+                style={
+                  value === category
+                    ? {
+                        color: "black",
+                        backgroundColor: "white",
+                        verticalAlign: "middle",
+                      }
+                    : {
+                        color: "white",
+                        backgroundColor: "transparent",
+                        verticalAlign: "middle",
+                      }
+                }
+                onClick={() => setCategory(value)}
               >
-                {option.icon}
-                {option.text}
+                {icon}
+                {text}
               </Button>
             ))}
-          </Button.Group>
-        </Form.Group> */}
-        <Form.Select
+          </div>
+        </div>
+        {/* <Form.Select
           label="Category"
           options={options}
           placeholder={"General"}
           onChange={(event, { value }) => setCategory(value)}
-        />
+        /> */}
         <Form.Select
           label="Type"
           options={categoryOptions}

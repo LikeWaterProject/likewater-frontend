@@ -7,7 +7,7 @@ import {
   Header,
   List,
   Button,
-  Item,
+  Icon,
   Transition,
 } from "semantic-ui-react";
 
@@ -19,27 +19,52 @@ const categories = [
   {
     type: EventType.AID,
     text: "Aid",
-    style: { backgroundColor: "gainsboro" },
+    icon: (
+      <i
+        className="ri-first-aid-kit-fill ri-lg"
+        style={{ color: "gainsboro", marginRight: 4 }}
+      />
+    ),
   },
   {
     type: EventType.INFO,
     text: "Info",
-    style: { backgroundColor: "mediumseagreen" },
+    icon: (
+      <i
+        className="ri-broadcast-fill ri-lg"
+        style={{ color: "mediumseagreen", marginRight: 4 }}
+      />
+    ),
   },
   {
     type: EventType.POLICE,
     text: "Police",
-    style: { backgroundColor: "royalblue" },
+    icon: (
+      <i
+        className="ri-alarm-warning-fill ri-lg"
+        style={{ color: "royalblue", marginRight: 4 }}
+      />
+    ),
   },
   {
     type: EventType.SAFETY,
     text: "Safety",
-    style: { backgroundColor: "darkorange" },
+    icon: (
+      <i
+        className="ri-fire-fill ri-lg"
+        style={{ color: "darkorange", marginRight: 4 }}
+      />
+    ),
   },
   {
     type: EventType.EMERGENCY,
     text: "SOS",
-    style: { backgroundColor: "crimson" },
+    icon: (
+      <i
+        className="ri-lifebuoy-fill ri-lg"
+        style={{ color: "crimson", marginRight: 4 }}
+      />
+    ),
   },
 ];
 
@@ -103,7 +128,7 @@ const EventList = ({ map, events, inverted, setEventFilter }) => {
         {!filtersVisible && (
           <div className="panel-header-text">
             <Header inverted={inverted} as="h3">
-              Nearby events
+              Events
             </Header>
           </div>
         )}
@@ -123,18 +148,20 @@ const EventList = ({ map, events, inverted, setEventFilter }) => {
             />
           </div>
         </Transition>
-          {filtersVisible && <button
-              style={{
-                border: "none",
-                backgroundColor: "transparent",
-                textAlign: "center",
-                fontSize: 18,
-                color: inverted ? "white" : "#212121",
-              }}
-              onClick={() => setFiltersVisible((v) => !v)}
-            >
-              <i className="ri-arrow-left-line panel-icon" />
-            </button>}
+        {filtersVisible && (
+          <button
+            style={{
+              border: "none",
+              backgroundColor: "transparent",
+              textAlign: "center",
+              fontSize: 18,
+              color: inverted ? "white" : "#212121",
+            }}
+            onClick={() => setFiltersVisible((v) => !v)}
+          >
+            <i className="ri-arrow-left-line panel-icon" />
+          </button>
+        )}
         <div className="button-row">
           <Transition
             visible={filtersVisible}
@@ -145,25 +172,35 @@ const EventList = ({ map, events, inverted, setEventFilter }) => {
               style={{
                 position: "absolute",
                 top: 16,
-                maxWidth: "100%",
+                maxWidth: "80%",
                 height: 48,
                 overflowX: "auto",
                 whiteSpace: "nowrap",
               }}
             >
-              {categories.map(({ type, text, style }) => (
+              {categories.map(({ type, text, icon }) => (
                 <Button
                   circular
                   toggle
+                  inverted
                   size="tiny"
                   key={type}
-                  style={{
-                    backgroundColor: eventFilters[type]
-                      ? style.backgroundColor
-                      : "grey",
-                  }}
+                  style={
+                    eventFilters[type]
+                      ? {
+                          color: "black",
+                          backgroundColor: "white",
+                          verticalAlign: "middle",
+                        }
+                      : {
+                          color: "white",
+                          backgroundColor: "transparent",
+                          verticalAlign: "middle",
+                        }
+                  }
                   onClick={() => handleFilterCategory(type)}
                 >
+                  {icon}
                   {text}
                 </Button>
               ))}
