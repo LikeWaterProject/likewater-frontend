@@ -1,52 +1,61 @@
 import { useMemo } from "react";
-import { AID, EMERGENCY, INFO, POLICE, SAFETY } from "../data/eventTypes";
+import * as EventType from "../events/types";
 
-const getEventIcon = (eventType) => {
-  switch (eventType) {
-    case AID:
+const getEventIcon = (eventCategory) => {
+  switch (eventCategory) {
+    case EventType.AID:
       return { icon: "first-aid-kit", color: "gainsboro" };
-    case EMERGENCY:
+    case EventType.EMERGENCY:
       return { icon: "lifebuoy", color: "crimson" };
-    case INFO:
+    case EventType.INFO:
       return { icon: "broadcast", color: "mediumseagreen" };
-    case POLICE:
+    case EventType.POLICE:
       return { icon: "alarm-warning", color: "royalblue" };
-    case SAFETY:
+    case EventType.SAFETY:
       return { icon: "fire", color: "darkorange" };
     default:
       return { icon: "pushpin-2", color: "mediumpurple" };
   }
 };
 
-// const getEventIcon = (eventType) => {
-//   switch (eventType) {
-//     case AID:
-//       return { icon: "first-aid-kit-fill", color: "gainsboro" };
-//     case EMERGENCY:
-//       return { icon: "emergency", color: "crimson" };
-//     case INFO:
-//       return { icon: "bullhorn", color: "mediumseagreen" };
-//     case POLICE:
-//       return { icon: "alarm-warning", color: "royalblue" };
-//     case SAFETY:
-//       return { icon: "fire", color: "darkorange" };
-//     default:
-//       return { icon: "map pin", color: "mediumpurple" };
-//   }
-// };
+const getSorter = (sortBy) => {
+  switch (sortBy) {
+    case "distance":
+      return (first, second) => first.distance - second.distance;
+    case "time":
+      return (first, second) =>
+        first.lastConfirmDt ??
+        first.reportedDt - second.lastConfirmDt ??
+        second.reportedDt;
+    case "category":
+      return (first, second) => first.eventCategory - second.eventCategory;
+    default:
+      return (first, second) => first.distance - second.distance;
+  }
+};
 
-export const mapEvents = (modelEvents) =>
-  modelEvents.map((event) => {
-    const { eventId, eventType, eventDesc, coordinates, reportedDt } = event;
+export const mapEvents = (
+  modelEvents = [],
+  eventFilters,
+  sortBy = "distance"
+) => {
+  const events = modelEvents.map((event) => {
     return {
-      eventId,
-      eventType,
-      coordinates,
-      eventDesc,
-      reportedDt,
-      ...getEventIcon(eventType),
+      ...event,
+      ...getEventIcon(event.eventCategory),
     };
   });
 
-export const useEvents = (modelEvents) =>
-  useMemo(() => mapEvents(modelEvents), [modelEvents]);
+  sortBy && events.sort(getSorter(sortBy));
+
+  return eventFilters
+    ? events.filter((event) => !!eventFilters[event.eventCategory])
+    : events;
+};
+
+export const useEvents = (modelEvents, eventFilters, sortBy) =>
+  useMemo(() => mapEvents(modelEvents, eventFilters, sortBy), [
+    modelEvents,
+    eventFilters,
+    sortBy,
+  ]);
