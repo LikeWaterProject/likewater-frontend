@@ -13,12 +13,12 @@ const Geolocator = ({ setCurrentPosition }) => {
 
   useEffect(() => {
     let isMounted = true;
-    if (!location.loading && location.longitude) {
+    if (!location.loading && location.longitude && location.latitude) {
       isMounted && setCurrentPosition(location);
     }
 
     return () => (isMounted = false);
-  }, [location]);
+  }, [location, setCurrentPosition]);
 
   return null;
 };
