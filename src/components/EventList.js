@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 import { formatDistance } from "date-fns";
 import { Segment, Header, List, Button } from "semantic-ui-react";
 import { getDistance } from "geolib";
@@ -74,16 +75,23 @@ const sampleEvents = [
   },
 ];
 
-const EventList = ({ events }) => {
+const EventList = ({ map, events, inverted, setEventFilter }) => {
   const history = useHistory();
-  const displayEvents = useEvents(sampleEvents);
+  const { nearbyEvents, eventFilters } = events;
+  const [sortBy, setSortBy] = useState("distance");
+  const displayEvents = useEvents(nearbyEvents, eventFilters, sortBy);
+  const [filtersVisible, setFiltersVisible] = useState(false);
+  // const { currentPosition, defaultPosition } = map;
 
-  const handleItemClick = (id) => {
-    history.push(`/events/${id}`);
-  };
+  const handleItemClick = useCallback(
+    (id) => {
+      history.push(`/events/${id}`);
+    },
+    [history]
+  );
 
-  const handleAddEvent = () => {
-    history.push("/submit");
+  const handleFilterCategory = (type) => {
+    setEventFilter({ [type]: !eventFilters[type] });
   };
 
   const listItems = useMemo(
@@ -100,47 +108,118 @@ const EventList = ({ events }) => {
             />
           </List.Content>
           <List.Content>
-            <List.Header>{event.eventDesc}</List.Header>
+            <List.Header>{event.eventType}</List.Header>
             <List.Description>
-              <b>{`${getDistance(
-                { lat: 40.671613, lon: -73.951909 },
-                event.coordinates,
-                5
-              )}ft`}</b>
+              <b>{`${event.distance}ft`}</b>
+              {/* <b>{`${Coordinate.distanceBetween(
+                currentPosition ?? defaultPosition,
+                event.coordinates
+              )}ft`}</b> */}
             </List.Description>
           </List.Content>
         </List.Item>
       )),
-    [events]
+    [displayEvents, handleItemClick]
   );
 
   return (
-    <Segment className="clickable" raised inverted style={{ padding: 16 }}>
+    <Segment
+      className="clickable"
+      raised
+      inverted={inverted}
+      style={{ padding: 16 }}
+    >
       <div className="panel-header">
-        <div className="panel-header-text">
-          <Header inverted as="h3">
-            Nearby events
-          </Header>
-        </div>
-        <div>
-          <Button
-            size="small"
-            inverted
-            color="blue"
-            circular
-            onClick={handleAddEvent}
+        {!filtersVisible && (
+          <div className="panel-header-text">
+            <Header inverted={inverted} as="h3">
+              Nearby events
+            </Header>
+          </div>
+        )}
+        <Transition
+          visible={!filtersVisible}
+          animation="vertical flip"
+          duration={300}
+        >
+          <div style={{ position: "absolute", right: 16 }}>
+            <Button circular size="tiny" color="grey" content="Sort" />
+            <Button
+              circular
+              size="tiny"
+              color="grey"
+              content="Filter"
+              onClick={() => setFiltersVisible((v) => !v)}
+            />
+          </div>
+        </Transition>
+          {filtersVisible && <button
+              style={{
+                border: "none",
+                backgroundColor: "transparent",
+                textAlign: "center",
+                fontSize: 18,
+                color: inverted ? "white" : "#212121",
+              }}
+              onClick={() => setFiltersVisible((v) => !v)}
+            >
+              <i className="ri-arrow-left-line panel-icon" />
+            </button>}
+        <div className="button-row">
+          <Transition
+            visible={filtersVisible}
+            animation="vertical flip"
+            duration={300}
           >
-            <i className="ri-add-fill ri-sm" style={{ paddingRight: 4 }} />
-            Add
-          </Button>
-          <Button size="small" inverted circular content="Filter" />
+            <div
+              style={{
+                position: "absolute",
+                top: 16,
+                maxWidth: "100%",
+                height: 48,
+                overflowX: "auto",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {categories.map(({ type, text, style }) => (
+                <Button
+                  circular
+                  toggle
+                  size="tiny"
+                  key={type}
+                  style={{
+                    backgroundColor: eventFilters[type]
+                      ? style.backgroundColor
+                      : "grey",
+                  }}
+                  onClick={() => handleFilterCategory(type)}
+                >
+                  {text}
+                </Button>
+              ))}
+            </div>
+          </Transition>
         </div>
       </div>
-      <List inverted divided selection verticalAlign="middle">
+      <List
+        inverted={inverted}
+        divided
+        selection
+        verticalAlign="middle"
+        style={{ maxHeight: 236, overflowY: "auto" }}
+      >
         {listItems}
       </List>
     </Segment>
   );
 };
 
-export default EventList;
+const mapStateToProps = (state) => {
+  return {
+    events: state.events,
+    map: state.map,
+    inverted: state.preferences.invertedTheme,
+  };
+};
+
+export default connect(mapStateToProps, { setEventFilter })(EventList);

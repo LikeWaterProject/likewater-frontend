@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Button } from "semantic-ui-react";
 
 import { setUseGeolocation } from "../actions";
 
-const MapControls = ({ context, shouldUseGeolocation, setUseGeolocation }) => {
+const MapControls = ({
+  context,
+  inverted,
+  currentPosition,
+  shouldUseGeolocation,
+  setUseGeolocation,
+}) => {
+  useEffect(() => {
+    if (currentPosition) {
+      context.flyTo({
+        center: [currentPosition.longitude, currentPosition.latitude],
+        zoom: 16,
+      });
+    }
+  }, [currentPosition]);
+
   const handleZoomIn = () => {
     context.zoomIn();
   };
@@ -25,7 +40,7 @@ const MapControls = ({ context, shouldUseGeolocation, setUseGeolocation }) => {
     <div>
       <Button
         icon="location arrow"
-        color="black"
+        color={inverted ? "black" : null}
         style={{ position: "absolute", top: 98, right: 3 }}
         onClick={handleReorient}
       />
@@ -33,11 +48,19 @@ const MapControls = ({ context, shouldUseGeolocation, setUseGeolocation }) => {
         vertical
         style={{ position: "absolute", top: 142, right: 6 }}
       >
-        <Button color="black" icon="plus" onClick={handleZoomIn} />
-        <Button color="black" icon="minus" onClick={handleZoomOut} />
+        <Button
+          color={inverted ? "black" : null}
+          icon="plus"
+          onClick={handleZoomIn}
+        />
+        <Button
+          color={inverted ? "black" : null}
+          icon="minus"
+          onClick={handleZoomOut}
+        />
       </Button.Group>
       <Button
-        color={shouldUseGeolocation ? "blue" : "black"}
+        color={shouldUseGeolocation ? "blue" : inverted ? "black" : null}
         icon="crosshairs"
         style={{ position: "absolute", top: 222, right: 3 }}
         onClick={handleShouldUseGeolocation}

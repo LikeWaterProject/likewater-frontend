@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getDistance } from "geolib";
+import { formatDistance } from "date-fns";
 import { Segment, Header, Item, Button } from "semantic-ui-react";
 
 import API from "../api";
+import { respondToEvent } from "../actions";
+import { Coordinate } from "../datatypes";
 import { mapEvents } from "../hooks";
 import LoadingPanel from "./LoadingPanel";
 
-const EventDetails = ({ map }) => {
+const EventDetails = ({ map, inverted, respondToEvent }) => {
   const { currentPosition } = map;
   const [loading, setLoading] = useState(false);
   const [event, setEvent] = useState();
@@ -42,8 +44,18 @@ const EventDetails = ({ map }) => {
     history.push("/");
   };
 
+  const handleEventResponse = (eventActive) => {
+    if (!event) return;
+    respondToEvent({ eventId: event.eventId, eventActive });
+  };
+
   return (
-    <Segment className="clickable" raised inverted style={{ padding: 16 }}>
+    <Segment
+      className="clickable"
+      raised
+      inverted={inverted}
+      style={{ padding: 16 }}
+    >
       {event ? (
         <Item>
           <Item.Header as="h3" className="panel-header">
@@ -52,14 +64,29 @@ const EventDetails = ({ map }) => {
                 border: "none",
                 backgroundColor: "transparent",
                 textAlign: "center",
-                color: "white",
+                color: inverted ? "white" : "#212121",
               }}
               onClick={handleBackPressed}
             >
               <i className="ri-arrow-left-line panel-icon" />
             </button>
-            {/* <Button basic inverted secondary circular className="ri-arrow-left-line" /> */}
             {event?.eventType}
+            <div style={{ position: "absolute", right: 16 }}>
+              <Button
+                circular
+                size="tiny"
+                color="grey"
+                content="Confirm"
+                onClick={() => handleEventResponse(1)}
+              />
+              <Button
+                circular
+                size="tiny"
+                color="grey"
+                content="Deny"
+                onClick={() => handleEventResponse(0)}
+              />
+            </div>
           </Item.Header>
           {/* <Item.Image>
               <i
@@ -71,14 +98,16 @@ const EventDetails = ({ map }) => {
             <Item.Description>
               {currentPosition &&
                 event &&
-                `${getDistance(event?.coordinates, {
-                  lon: currentPosition.longitude,
-                  lat: currentPosition.latitude,
-                })}m`}
+                `${Coordinate.distanceBetween(
+                  event?.coordinates,
+                  currentPosition
+                )}ft`}
             </Item.Description>
             <Item.Meta>{event?.eventDesc}</Item.Meta>
             <Item.Extra>
-              {new Date(parseInt(event?.reportedDt)).toISOString()}
+              {formatDistance(parseInt(event.reportedDt), Date.now(), {
+                addSuffix: true,
+              })}
             </Item.Extra>
           </Item.Content>
         </Item>
@@ -90,7 +119,7 @@ const EventDetails = ({ map }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { map: state.map };
+  return { map: state.map, inverted: state.preferences.invertedTheme };
 };
 
-export default connect(mapStateToProps, {})(EventDetails);
+export default connect(mapStateToProps, { respondToEvent })(EventDetails);

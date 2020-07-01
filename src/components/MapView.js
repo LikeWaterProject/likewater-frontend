@@ -41,7 +41,7 @@ positionIcon.src = positionAsset;
 const MAP_DEFAULTS = {
   defaultZoom: [10],
   volumetricPainter: {
-    "fill-extrusion-color": "#424d5c",
+    // "fill-extrusion-color": inverted ? "#424D5C" : "#CAD2D3",
     "fill-extrusion-height": {
       type: "identity",
       property: "height",
@@ -186,16 +186,13 @@ const MapView = ({ onMoveEnd, toggleControls, map, setMarkerPosition }) => {
     delay: 500,
   });
 
-  // const handleMapMoved = (map, mapEvent) => {
-  //   // console.log(mapEvent);
-  //   /* eslint-disable no-unused-expressions */
-  //   mapEvent.originalEvent?.preventDefault?.();
-  //   onMoveEnd(map);
-  // };
-
   return (
     <Mapbox
-      style="mapbox://styles/rektdeckard/ckayd52rb0xzg1imcbyek0g4y"
+      style={
+        inverted
+          ? "mapbox://styles/rektdeckard/ckayd52rb0xzg1imcbyek0g4y"
+          : "mapbox://styles/mapbox/light-v10"
+      }
       containerStyle={{
         width,
         height,

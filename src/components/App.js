@@ -34,14 +34,16 @@ const App = ({ shouldUseGeolocation, initializeGeolocation }) => {
       {shouldUseGeolocation && <Geolocator />}
       <Sidebar.Pushable className="no-overflow">
         <TopSheet
+          inverted={inverted}
           visible={controlsVisible}
           toggleControls={handleToggleControls}
         />
-        <BottomSheet visible={controlsVisible} />
+        <BottomSheet inverted={inverted} visible={controlsVisible} />
         <Sidebar.Pusher>
           <MapView
-            onMoveEnd={handleMapMove}
+            inverted={inverted}
             toggleControls={handleToggleControls}
+            onMoveEnd={handleMapMoveEnd}
             onContextMenu={handleMapContextMenu}
           />
         </Sidebar.Pusher>

@@ -13,6 +13,15 @@
   min-height: 34px;
 }
 
+.button-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 34px;
+}
+
 .panel-header-text {
   flex: 1;
 }

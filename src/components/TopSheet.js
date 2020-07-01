@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import {
   Segment,
   Menu,
@@ -8,21 +9,24 @@ import {
   Button,
 } from "semantic-ui-react";
 
-const TopSheet = ({ visible, toggleControls }) => {
+import { toggleTheme } from "../actions";
+
+const TopSheet = ({ inverted, visible, toggleControls, toggleTheme }) => {
   const [query, setQuery] = useState("");
 
   return (
     <Sidebar
       as={Segment}
-      inverted
+      basic={!inverted}
+      inverted={inverted}
       raised
       direction="top"
       animation="push"
       textAlign="center"
       visible
-      style={{ padding: 4 }}
+      style={{ padding: 0, boxShadow: "none" }}
     >
-      <Menu inverted borderless widths={3}>
+      <Menu inverted={inverted} borderless widths={3}>
         <Menu.Item> </Menu.Item>
         <Menu.Item fitted>
           <Search
@@ -36,7 +40,14 @@ const TopSheet = ({ visible, toggleControls }) => {
         </Menu.Item>
         <Menu.Menu position="right">
           <Menu.Item>
-            <Button circular size="large" color="black" icon="setting" floated="right" />
+            <Button
+              circular
+              size="large"
+              color={inverted ? "black" : null}
+              icon="setting"
+              floated="right"
+              onClick={toggleTheme}
+            />
           </Menu.Item>
         </Menu.Menu>
       </Menu>
@@ -44,4 +55,4 @@ const TopSheet = ({ visible, toggleControls }) => {
   );
 };
 
-export default TopSheet;
+export default connect(null, { toggleTheme })(TopSheet);

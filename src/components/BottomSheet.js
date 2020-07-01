@@ -1,15 +1,17 @@
-import React, { Suspense } from "react";
+import React, { useMemo, Suspense } from "react";
 import { withRouter, Switch, Route } from "react-router-dom";
+import { connect } from "react-redux";
 import { Sidebar, Button } from "semantic-ui-react";
 
 import LoadingPanel from "./LoadingPanel";
 
-const Loader = <LoadingPanel />;
 const EventList = React.lazy(() => import("./EventList"));
 const EventDetails = React.lazy(() => import("./EventDetails"));
 const EventSubmit = React.lazy(() => import("./EventSubmit"));
 
-const BottomSheet = ({ visible }) => {
+const BottomSheet = ({ inverted, visible }) => {
+  const Loader = useMemo(() => <LoadingPanel />, [inverted]);
+
   // TODO: implement instant submission of high-priotiry SOS event
   const handleSOS = () => window.confirm("Send SOS?");
 
@@ -26,7 +28,7 @@ const BottomSheet = ({ visible }) => {
           className="clickable"
           circular
           compact
-          color="black"
+          color={inverted ? "black" : null}
           size="huge"
           icon="bullhorn"
           onClick={handleSOS}
@@ -35,20 +37,20 @@ const BottomSheet = ({ visible }) => {
       <Switch>
         <Route path="/events/:id">
           <Suspense fallback={Loader}>
-            <EventDetails />
+            <EventDetails inverted={inverted} />
           </Suspense>
         </Route>
         <Route exact path="/submit">
           <Suspense fallback={Loader}>
-            <EventSubmit />
+            <EventSubmit inverted={inverted} />
           </Suspense>
         </Route>
         <Route exact path="/sos">
-          <LoadingPanel />
+          <LoadingPanel inverted={inverted} />
         </Route>
         <Route>
           <Suspense fallback={Loader}>
-            <EventList />
+            <EventList inverted={inverted} />
           </Suspense>
         </Route>
       </Switch>
@@ -56,4 +58,8 @@ const BottomSheet = ({ visible }) => {
   );
 };
 
-export default withRouter(BottomSheet);
+const mapStateToProps = (state) => {
+  return { inverted: state.preferences.invertedTheme };
+};
+
+export default connect(mapStateToProps, {})(withRouter(BottomSheet));
