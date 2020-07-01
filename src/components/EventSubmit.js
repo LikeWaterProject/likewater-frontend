@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import {
   Segment,
   Header,
@@ -8,25 +9,16 @@ import {
   Divider,
   Button,
   Label,
-  Radio,
 } from "semantic-ui-react";
 
-import { reportEvent } from "../actions";
-
-const sampleEvent = {
-  type: "Water Distribution",
-  description: "",
-  distance: 250,
-  lastActive: "Just now",
-  icon: "first-aid-kit",
-  color: "gainsboro",
-};
+import { reportEvent, getEventTypes } from "../actions";
+import * as EventType from "../events/types";
 
 const options = [
   {
-    key: "aid",
+    key: EventType.AID,
+    value: EventType.AID,
     text: "Aid",
-    value: "aid",
     icon: (
       <i
         className="ri-first-aid-kit-fill ri-lg aid"
