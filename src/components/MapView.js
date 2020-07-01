@@ -1,42 +1,22 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useRef, useMemo, useCallback } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useWindowSize } from "react-use";
-import ReactMapboxGl, {
-  MapContext,
-  Layer,
-  Feature,
-  Image as Pin,
-} from "react-mapbox-gl";
+import ReactMapboxGl, { MapContext, Layer, Feature } from "react-mapbox-gl";
 
+import * as EventType from "../events/types";
 import { useLongPress } from "../hooks";
 import { setMarkerPosition } from "../actions";
-import pinAsset from "../assets/pushpin-2-fill.svg";
-import policeAsset from "../assets/alarm-warning-fill.svg";
-import fireAsset from "../assets/fire-fill.svg";
-import medicalAsset from "../assets/first-aid-kit-fill.svg";
-import infoAsset from "../assets/broadcast-fill.svg";
-import positionAsset from "../assets/focus-3-line.svg";
 import MapControls from "./MapControls";
+import MapEventLayer from "./MapEventLayer";
+import MapIcons from "./MapIcons";
 
 const Mapbox = ReactMapboxGl({
   accessToken:
     "pk.eyJ1IjoicmVrdGRlY2thcmQiLCJhIjoiY2theWJ4OXM0MGhiejJ3cnkzcmk0andiYyJ9.IinlG0vyUvcWhvlAREJXeA",
   attributionControl: false,
+  trackResize: false,
 });
-
-const pinIcon = new Image(24, 24);
-pinIcon.src = pinAsset;
-const policeIcon = new Image(24, 24);
-policeIcon.src = policeAsset;
-const fireIcon = new Image(24, 24);
-fireIcon.src = fireAsset;
-const medicalIcon = new Image(24, 24);
-medicalIcon.src = medicalAsset;
-const infoIcon = new Image(24, 24);
-infoIcon.src = infoAsset;
-const positionIcon = new Image(24, 24);
-positionIcon.src = positionAsset;
 
 const MAP_DEFAULTS = {
   defaultZoom: [10],
@@ -54,84 +34,24 @@ const MAP_DEFAULTS = {
   },
 };
 
-const data = [
-  {
-    eventId: "0B479F98-12D1-49C5-9A5A-28E8BAC9E420",
-    eventType: "police",
-    eventDesc: "Beating at 12th and Lexington",
-    userToken: "User98765",
-    reportedDt: 1592356915877,
-    confirms: 3,
-    dismisses: 1,
-    coordinates: {
-      lat: 41,
-      lon: -74,
-    },
-  },
-  {
-    eventId: "0FF83A5F-EA8F-462C-AD8E-81BB704ED4FC",
-    eventType: "aid",
-    eventDesc: "Water bottles and eye-wash station",
-    userToken: "User1111",
-    reportedDt: 1592430145773,
-    confirms: 0,
-    dismisses: 0,
-    coordinates: {
-      lat: 40.6911,
-      lon: -74.00348,
-    },
-  },
-  {
-    eventId: "582276B6-65C8-4FAE-B7D6-27CD1F9EB19D",
-    eventType: "info",
-    userToken: "User1111",
-    eventDesc: "Rally Point",
-    reportedDt: 1592356992014,
-    confirms: 3,
-    dismisses: 1,
-    coordinates: {
-      lat: 40.695103,
-      lon: -73.984165,
-    },
-  },
-  {
-    eventId: "04E9E828-EFF3-4144-A875-39AC87179B66",
-    eventType: "info",
-    userToken: "User123456",
-    eventDesc: "Extra Masks",
-    reportedDt: 1592430500012,
-    confirms: 3,
-    dismisses: 1,
-    coordinates: {
-      lat: 40.694794,
-      lon: -73.981783,
-    },
-  },
-  {
-    eventId: "F176598B-A4E1-4E14-A3A3-6C0E2AAED664",
-    eventType: "safety",
-    userToken: "User123456",
-    eventDesc: "Looting",
-    reportedDt: 1592430500012,
-    confirms: 2,
-    dismisses: 0,
-    coordinates: {
-      lat: 40.693257,
-      lon: -73.983478,
-    },
-  },
-];
-
-const MapView = ({ onMoveEnd, toggleControls, map, setMarkerPosition }) => {
+const MapView = ({
+  map,
+  events,
+  onMoveEnd,
+  toggleControls,
+  setMarkerPosition,
+  inverted,
+}) => {
   const history = useHistory();
   const { width, height } = useWindowSize();
+  const defaultPosition = useRef(map.defaultPosition);
   const {
     currentPosition,
-    defaultPosition,
     markerPosition,
     showVolumetricBuildings,
     showBasicMapFeatures,
   } = map;
+  const { nearbyEvents, eventFilters } = events;
 
   const initializeMap = (map) => {
     map.on("click", ({ originalEvent }) => {
@@ -181,7 +101,7 @@ const MapView = ({ onMoveEnd, toggleControls, map, setMarkerPosition }) => {
     history.push("/submit");
   };
 
-  const longPressEvent = useLongPress(handleAddMarker, {
+  const onLongPressEvent = useLongPress(handleAddMarker, {
     isPreventDefault: true,
     delay: 500,
   });
@@ -197,27 +117,14 @@ const MapView = ({ onMoveEnd, toggleControls, map, setMarkerPosition }) => {
         width,
         height,
       }}
-      center={
-        currentPosition
-          ? [currentPosition.longitude, currentPosition.latitude]
-          : defaultPosition
-      }
+      center={defaultPosition.current}
       zoom={MAP_DEFAULTS.defaultZoom}
       onStyleLoad={initializeMap}
       onContextMenu={handleAddMarker}
-      // onMoveEnd={handleMapMoved}
-      {...longPressEvent}
+      onMoveEnd={onMoveEnd}
+      {...onLongPressEvent}
     >
-      <Pin id="police" data={policeIcon} />
-      <Pin id="pin" data={pinIcon} />
-      <Pin id="fire" data={fireIcon} />
-      <Pin id="medical" data={medicalIcon} />
-      <Pin id="info" data={infoIcon} />
-      <Pin id="position" data={positionIcon} />
-
-      <MapContext.Consumer>
-        {(context) => <MapControls context={context} />}
-      </MapContext.Consumer>
+      <MapIcons />
 
       {showVolumetricBuildings && (
         <Layer
@@ -227,15 +134,86 @@ const MapView = ({ onMoveEnd, toggleControls, map, setMarkerPosition }) => {
           sourceLayer="building"
           filter={["==", "extrude", "true"]}
           minZoom={14}
-          paint={MAP_DEFAULTS.volumetricPainter}
+          paint={{
+            ...MAP_DEFAULTS.volumetricPainter,
+            "fill-extrusion-color": inverted ? "#424D5C" : "#CAD2D3",
+          }}
         />
       )}
+
+      {/* FIXME: context does not update unless props do, wherefore no repaint of icons */}
+      <MapContext.Consumer>
+        {(context) => {
+          const isZoomedIn = context.getZoom() > 15;
+          return (
+            <>
+              <MapControls context={context} currentPosition={currentPosition} inverted={inverted} />
+              {eventFilters[EventType.AID] && (
+                <MapEventLayer
+                  type={EventType.AID}
+                  events={nearbyEvents.filter(
+                    ({ eventCategory }) => eventCategory === EventType.AID
+                  )}
+                  onMouseEvents={onMouseEvents}
+                  visibility={eventFilters.aid}
+                  allowOverlap={isZoomedIn}
+                />
+              )}
+              {eventFilters[EventType.INFO] && (
+                <MapEventLayer
+                  type={EventType.INFO}
+                  events={nearbyEvents.filter(
+                    ({ eventCategory }) => eventCategory === EventType.INFO
+                  )}
+                  onMouseEvents={onMouseEvents}
+                  visibility={eventFilters.info}
+                  allowOverlap={isZoomedIn}
+                />
+              )}
+              {eventFilters[EventType.POLICE] && (
+                <MapEventLayer
+                  type={EventType.POLICE}
+                  events={nearbyEvents.filter(
+                    ({ eventCategory }) => eventCategory === EventType.POLICE
+                  )}
+                  onMouseEvents={onMouseEvents}
+                  visibility={eventFilters.police}
+                  allowOverlap={isZoomedIn}
+                />
+              )}
+              {eventFilters[EventType.SAFETY] && (
+                <MapEventLayer
+                  type={EventType.SAFETY}
+                  events={nearbyEvents.filter(
+                    ({ eventCategory }) => eventCategory === EventType.SAFETY
+                  )}
+                  onMouseEvents={onMouseEvents}
+                  visibility={eventFilters.safety}
+                  allowOverlap={isZoomedIn}
+                />
+              )}
+              {eventFilters[EventType.EMERGENCY] && (
+                <MapEventLayer
+                  type={EventType.EMERGENCY}
+                  events={nearbyEvents.filter(
+                    ({ eventCategory }) => eventCategory === EventType.EMERGENCY
+                  )}
+                  onMouseEvents={onMouseEvents}
+                  visibility={eventFilters.sos}
+                  allowOverlap={isZoomedIn}
+                />
+              )}
+            </>
+          );
+        }}
+      </MapContext.Consumer>
+
       {markerPosition && (
         <Layer
           id="map-marker"
           type="symbol"
           layout={{
-            "icon-image": "pin",
+            "icon-image": "PIN",
             "icon-anchor": "bottom",
             "icon-allow-overlap": true,
           }}
@@ -243,32 +221,11 @@ const MapView = ({ onMoveEnd, toggleControls, map, setMarkerPosition }) => {
           <Feature coordinates={markerPosition} />
         </Layer>
       )}
-      <Layer
-        id="event-markers"
-        type="symbol"
-        layout={{ "icon-image": "info", "icon-allow-overlap": true }}
-        // images={["test", image]}
-      >
-        {data.map((evt) => {
-          const {
-            eventId,
-            coordinates: { lon, lat },
-          } = evt;
-          return (
-            <Feature
-              key={eventId}
-              coordinates={[lon, lat]}
-              properties={evt}
-              {...onMouseEvents}
-            />
-          );
-        })}
-      </Layer>
       {currentPosition && (
         <Layer
           id="location-marker"
           type="symbol"
-          layout={{ "icon-image": "position", "icon-allow-overlap": true }}
+          layout={{ "icon-image": "POSITION", "icon-allow-overlap": true }}
         >
           <Feature
             coordinates={[currentPosition.longitude, currentPosition.latitude]}
@@ -281,7 +238,7 @@ const MapView = ({ onMoveEnd, toggleControls, map, setMarkerPosition }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { map: state.map };
+  return { map: state.map, events: state.events };
 };
 
 export default connect(mapStateToProps, { setMarkerPosition })(MapView);
