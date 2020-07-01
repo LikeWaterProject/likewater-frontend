@@ -1,77 +1,45 @@
-import React, { useMemo } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { formatDistance } from "date-fns";
-import { Segment, Header, List, Button } from "semantic-ui-react";
-import { getDistance } from "geolib";
+import {
+  Segment,
+  Header,
+  List,
+  Button,
+  Item,
+  Transition,
+} from "semantic-ui-react";
 
+import { setEventFilter } from "../actions";
 import { useEvents } from "../hooks";
+import * as EventType from "../events/types";
 
-const sampleEvents = [
+const categories = [
   {
-    eventId: "0B479F98-12D1-49C5-9A5A-28E8BAC9E420",
-    eventType: "police",
-    eventDesc: "Beating at 12th and Lexington",
-    userToken: "User98765",
-    reportedDt: 1592356915877,
-    confirms: 3,
-    dismisses: 1,
-    coordinates: {
-      lat: 41,
-      lon: -74,
-    },
+    type: EventType.AID,
+    text: "Aid",
+    style: { backgroundColor: "gainsboro" },
   },
   {
-    eventId: "0FF83A5F-EA8F-462C-AD8E-81BB704ED4FC",
-    eventType: "aid",
-    eventDesc: "Water bottles and eye-wash station",
-    userToken: "User1111",
-    reportedDt: 1592430145773,
-    confirms: 0,
-    dismisses: 0,
-    coordinates: {
-      lat: 40.6911,
-      lon: -74.00348,
-    },
+    type: EventType.INFO,
+    text: "Info",
+    style: { backgroundColor: "mediumseagreen" },
   },
   {
-    eventId: "582276B6-65C8-4FAE-B7D6-27CD1F9EB19D",
-    eventType: "info",
-    userToken: "User1111",
-    eventDesc: "Rally Point",
-    reportedDt: 1592356992014,
-    confirms: 3,
-    dismisses: 1,
-    coordinates: {
-      lat: 40.695103,
-      lon: -73.984165,
-    },
+    type: EventType.POLICE,
+    text: "Police",
+    style: { backgroundColor: "royalblue" },
   },
   {
-    eventId: "04E9E828-EFF3-4144-A875-39AC87179B66",
-    eventType: "info",
-    userToken: "User123456",
-    eventDesc: "Extra Masks",
-    reportedDt: 1592430500012,
-    confirms: 3,
-    dismisses: 1,
-    coordinates: {
-      lat: 40.694794,
-      lon: -73.981783,
-    },
+    type: EventType.SAFETY,
+    text: "Safety",
+    style: { backgroundColor: "darkorange" },
   },
   {
-    eventId: "F176598B-A4E1-4E14-A3A3-6C0E2AAED664",
-    eventType: "safety",
-    userToken: "User123456",
-    eventDesc: "Looting",
-    reportedDt: 1592430500012,
-    confirms: 2,
-    dismisses: 0,
-    coordinates: {
-      lat: 40.693257,
-      lon: -73.983478,
-    },
+    type: EventType.EMERGENCY,
+    text: "SOS",
+    style: { backgroundColor: "crimson" },
   },
 ];
 
@@ -99,7 +67,9 @@ const EventList = ({ map, events, inverted, setEventFilter }) => {
       displayEvents.map((event, index) => (
         <List.Item key={index} onClick={() => handleItemClick(event.eventId)}>
           <List.Content floated="right">
-            {formatDistance(event.reportedDt, Date.now(), { addSuffix: true })}
+            {formatDistance(parseInt(event.reportedDt), Date.now(), {
+              addSuffix: true,
+            })}
           </List.Content>
           <List.Content floated="left" style={{ paddingTop: 8 }}>
             <i
