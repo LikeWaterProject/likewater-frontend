@@ -1,10 +1,31 @@
-import { FETCH_EVENTS, FETCH_EVENT_DETAILS, SET_EVENT_FILTER } from ".";
+import {
+  FETCH_EVENTS,
+  FETCH_EVENT_TYPES,
+  FETCH_EVENT_DETAILS,
+  SET_EVENT_FILTER,
+} from ".";
 import API from "../api";
 
-export const getEvents = ({ lat, lon, radius = 5000 }) => async (dispatch) => {
-  const result = await API.post("/getevents", { lat, lon, radius });
+export const getEvents = ({
+  coordinates,
+  radius = 75000,
+  userToken = "UNASSIGNED",
+}) => async (dispatch) => {
+  const result = await API.post("/getevents", {
+    coordinates,
+    radius,
+    userToken,
+  });
   dispatch({
     type: FETCH_EVENTS,
+    payload: result.data,
+  });
+};
+
+export const getEventTypes = () => async (dispatch) => {
+  const result = await API.get("/geteventtypes");
+  dispatch({
+    type: FETCH_EVENT_TYPES,
     payload: result.data,
   });
 };
@@ -17,15 +38,41 @@ export const getEventDetails = (eventId) => async (dispatch) => {
   });
 };
 
-export const reportEvent = (report) => async (dispatch) => {
-  const result = await API.post("/submitreport", report);
-  dispatch({
-    type: null,
+export const reportEvent = ({
+  coordinates,
+  eventCategory,
+  eventType,
+  eventDesc,
+}) => async (dispatch, getState) => {
+  const userToken = getState().user.userToken ?? "UNASSIGNED";
+  const result = await API.post("/reportevent", {
+    coordinates,
+    eventCategory,
+    eventType,
+    eventDesc,
+    userToken,
   });
+  console.log(result);
+  dispatch(getEvents({ coordinates, userToken }));
 };
 
-export const setEventFilter = (filters = []) => {
-  localStorage.setItem(SET_EVENT_FILTER, JSON.stringify(filters));
+export const respondToEvent = ({ eventId, eventActive }) => async (
+  dispatch,
+  getState
+) => {
+  const userToken = getState().user.userToken ?? "UNASSIGNED";
+  const response = await API.post("/respondtoevent", {
+    eventId,
+    eventActive,
+    userToken,
+  });
+  console.log(response);
+  if (response.status === 200) {
+    // Mark event as confirmed/denied for this user
+  }
+};
+
+export const setEventFilter = (filters = {}) => {
   return {
     type: SET_EVENT_FILTER,
     payload: filters,
