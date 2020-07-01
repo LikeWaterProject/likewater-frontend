@@ -1,5 +1,11 @@
 import React, { useMemo, Suspense } from "react";
-import { withRouter, Switch, Route } from "react-router-dom";
+import {
+  withRouter,
+  Switch,
+  Route,
+  useLocation,
+  useHistory,
+} from "react-router-dom";
 import { connect } from "react-redux";
 import { Sidebar, Button } from "semantic-ui-react";
 
@@ -10,10 +16,17 @@ const EventDetails = React.lazy(() => import("./EventDetails"));
 const EventSubmit = React.lazy(() => import("./EventSubmit"));
 
 const BottomSheet = ({ inverted, visible }) => {
+  const location = useLocation();
+  const history = useHistory();
   const Loader = useMemo(() => <LoadingPanel />, [inverted]);
 
-  // TODO: implement instant submission of high-priotiry SOS event
-  const handleSOS = () => window.confirm("Send SOS?");
+  const handleFabClick = () => {
+    if (location.pathname === "/submit") {
+      history.push("/");
+    } else {
+      history.push("/submit");
+    }
+  };
 
   return (
     <Sidebar
@@ -30,8 +43,8 @@ const BottomSheet = ({ inverted, visible }) => {
           compact
           color={inverted ? "black" : null}
           size="huge"
-          icon="bullhorn"
-          onClick={handleSOS}
+          icon={location.pathname === "/submit" ? "close" : "thumbtack"}
+          onClick={handleFabClick}
         ></Button>
       </div>
       <Switch>
