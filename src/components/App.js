@@ -1,23 +1,57 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Sidebar } from "semantic-ui-react";
+// import { getDistance } from "geolib";
 
-import { initializeGeolocation } from "../actions";
+import {
+  initializeUser,
+  initializeGeolocation,
+  getEvents,
+  getEventTypes,
+} from "../actions";
 import Geolocator from "./Geolocator";
 import MapView from "./MapView";
 import TopSheet from "./TopSheet";
 import BottomSheet from "./BottomSheet";
+import Coordinate from "../datatypes/Coordinate";
 
-const App = ({ shouldUseGeolocation, initializeGeolocation }) => {
+const App = ({
+  initializeUser,
+  initializeGeolocation,
+  shouldUseGeolocation,
+  defaultPosition,
+  getEvents,
+  getEventTypes,
+  inverted,
+}) => {
   const [controlsVisible, setControlsVisible] = useState(true);
 
+  // TODO: separate effects into separate function calls
   useEffect(() => {
+    initializeUser();
     initializeGeolocation();
-  }, []);
+    getEventTypes();
+    getEvents({
+      coordinates: {
+        lon: defaultPosition[0],
+        lat: defaultPosition[1],
+      },
+    });
+  }, [
+    initializeUser,
+    initializeGeolocation,
+    getEvents,
+    getEventTypes,
+    defaultPosition,
+  ]);
 
-  const handleMapMove = (mapEvent) => {
-    const { lng: lon, lat } = mapEvent.getCenter();
+  const handleMapMoveEnd = (context) => {
+    const { lng, lat } = context.getCenter();
+    const { _sw, _ne } = context.getBounds();
+    // const meters = getDistance(_sw, _ne);
+    const radius = Coordinate.distanceBetween(_sw, _ne) / 2;
     // setMapPosition([lon, lat]);
+    getEvents({ coordinates: { lon: lng, lat }, radius });
   };
 
   const handleMapContextMenu = (mapEvent) => {
@@ -53,7 +87,16 @@ const App = ({ shouldUseGeolocation, initializeGeolocation }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { shouldUseGeolocation: state.map.shouldUseGeolocation };
+  return {
+    shouldUseGeolocation: state.map.shouldUseGeolocation,
+    defaultPosition: state.map.defaultPosition,
+    inverted: state.preferences.invertedTheme,
+  };
 };
 
-export default connect(mapStateToProps, { initializeGeolocation })(App);
+export default connect(mapStateToProps, {
+  initializeUser,
+  initializeGeolocation,
+  getEvents,
+  getEventTypes,
+})(App);
