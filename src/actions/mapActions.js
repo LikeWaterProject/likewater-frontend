@@ -1,5 +1,9 @@
-import { SET_DEFAULT_POSITION, SET_MARKER_POSITION } from ".";
-import { SET_CURRENT_POSITION, SET_USE_GEOLOCATION } from "./types";
+import {
+  SET_CURRENT_POSITION,
+  SET_USE_GEOLOCATION,
+  SET_DEFAULT_POSITION,
+  SET_MARKER_POSITION,
+} from "./types";
 
 export const setMarkerPosition = (coordinates) => {
   return {
@@ -24,14 +28,14 @@ export const setCurrentPosition = (position) => {
 };
 
 export const setUseGeolocation = (preferred) => async (dispatch) => {
-  localStorage.setItem(SET_USE_GEOLOCATION, JSON.stringify(preferred));
+  localStorage.setItem(SET_USE_GEOLOCATION, JSON.stringify(!!preferred));
   const { state: permitted } = await navigator.permissions.query({
     name: "geolocation",
   });
 
   dispatch({
     type: SET_USE_GEOLOCATION,
-    payload: preferred,
+    payload: !!preferred,
   });
 
   if (!preferred) dispatch(setCurrentPosition(null));
@@ -39,7 +43,7 @@ export const setUseGeolocation = (preferred) => async (dispatch) => {
 
 export const initializeGeolocation = () => async (dispatch, getState) => {
   const preferred =
-    JSON.parse(localStorage.getItem(SET_USE_GEOLOCATION)) ?? false;
+    JSON.parse(localStorage.getItem(SET_USE_GEOLOCATION));
 
   let permitted;
   navigator.permissions
