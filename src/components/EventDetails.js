@@ -83,7 +83,7 @@ const EventDetails = ({ map, inverted, respondToEvent }) => {
                 circular
                 size="tiny"
                 color="grey"
-                content="Deny"
+                content="Dismiss"
                 onClick={() => handleEventResponse(0)}
               />
             </div>
