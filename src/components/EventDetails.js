@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { formatDistance } from "date-fns";
-import { Segment, Header, Item, Button } from "semantic-ui-react";
+import { Segment, Item, Button } from "semantic-ui-react";
 
 import API from "../api";
 import { respondToEvent } from "../actions";
@@ -10,8 +10,7 @@ import { Coordinate } from "../datatypes";
 import { mapEvents } from "../hooks";
 import LoadingPanel from "./LoadingPanel";
 
-const EventDetails = ({ map, inverted, respondToEvent }) => {
-  const { currentPosition } = map;
+const EventDetails = ({ mapPosition, inverted, respondToEvent }) => {
   const [loading, setLoading] = useState(false);
   const [event, setEvent] = useState();
   const history = useHistory();
@@ -77,14 +76,14 @@ const EventDetails = ({ map, inverted, respondToEvent }) => {
                 size="tiny"
                 color="grey"
                 content="Confirm"
-                onClick={() => handleEventResponse(1)}
+                onClick={() => handleEventResponse(true)}
               />
               <Button
                 circular
                 size="tiny"
                 color="grey"
                 content="Dismiss"
-                onClick={() => handleEventResponse(0)}
+                onClick={() => handleEventResponse(false)}
               />
             </div>
           </Item.Header>
@@ -95,14 +94,15 @@ const EventDetails = ({ map, inverted, respondToEvent }) => {
               />
             </Item.Image> */}
           <Item.Content>
-            <Item.Description>
+            <Item.Description>{Coordinate.distanceBetween(event.coordinates, mapPosition)}ft</Item.Description>
+            {/* <Item.Description>
               {currentPosition &&
                 event &&
                 `${Coordinate.distanceBetween(
                   event?.coordinates,
                   currentPosition
                 )}ft`}
-            </Item.Description>
+            </Item.Description> */}
             <Item.Meta>{event?.eventDesc}</Item.Meta>
             <Item.Extra>
               {formatDistance(parseInt(event.reportedDt), Date.now(), {
@@ -119,7 +119,10 @@ const EventDetails = ({ map, inverted, respondToEvent }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { map: state.map, inverted: state.preferences.invertedTheme };
+  return {
+    mapPosition: state.map.mapPosition,
+    inverted: state.preferences.invertedTheme,
+  };
 };
 
 export default connect(mapStateToProps, { respondToEvent })(EventDetails);
