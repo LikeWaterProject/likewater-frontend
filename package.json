@@ -1,12 +1,9 @@
 {
   "name": "likewater",
   "version": "0.1.2",
-  "homepage": "https://likewaterproject.github.io/likewater-frontend/",
+  "homepage": "https://map.likewater.app/",
   "private": false,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "date-fns": "^2.14.0",
     "geolib": "^3.3.1",
@@ -49,6 +46,9 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^3.0.0"
+    "gh-pages": "^3.0.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2"
   }
 }
