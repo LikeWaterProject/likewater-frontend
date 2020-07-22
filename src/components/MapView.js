@@ -144,7 +144,7 @@ const MapView = ({
       {/* FIXME: context does not update unless props do, wherefore no repaint of icons */}
       <MapContext.Consumer>
         {(context) => {
-          const isZoomedIn = context.getZoom() > 15;
+          const isZoomedIn = context.getZoom() > 10;
           return (
             <>
               <MapControls context={context} currentPosition={currentPosition} inverted={inverted} />
