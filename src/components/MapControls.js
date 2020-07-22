@@ -19,7 +19,7 @@ const MapControls = ({
         zoom: 16,
       });
     }
-  }, [currentPosition, shouldUseGeolocation]);
+  }, [context, currentPosition, shouldUseGeolocation]);
 
   const handleZoomIn = () => {
     context.zoomIn();

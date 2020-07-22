@@ -1,15 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import {
-  Segment,
-  Header,
-  Icon,
-  Form,
-  Divider,
-  Button,
-  Label,
-} from "semantic-ui-react";
+import { Segment, Header, Form, Button } from "semantic-ui-react";
 
 import { reportEvent, getEventTypes } from "../actions";
 import * as EventType from "../events/types";
@@ -67,7 +59,7 @@ const EventSubmit = ({
 
   useEffect(() => {
     if (!eventTypes) getEventTypes();
-  }, []);
+  }, [eventTypes, getEventTypes]);
 
   const categoryOptions = useMemo(() => {
     return eventTypes && category

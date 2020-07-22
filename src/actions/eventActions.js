@@ -52,7 +52,6 @@ export const reportEvent = ({
     eventDesc,
     userToken,
   });
-  console.log(result);
   dispatch(getEvents({ coordinates, userToken }));
 };
 

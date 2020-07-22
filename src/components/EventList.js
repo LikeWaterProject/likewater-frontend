@@ -2,14 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { formatDistance } from "date-fns";
-import {
-  Segment,
-  Header,
-  List,
-  Button,
-  Icon,
-  Transition,
-} from "semantic-ui-react";
+import { Segment, Header, List, Button, Transition } from "semantic-ui-react";
 
 import { setEventFilter } from "../actions";
 import { useEvents } from "../hooks";
