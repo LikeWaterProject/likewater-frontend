@@ -52,26 +52,22 @@ const BottomSheet = ({ setMarkerPosition, setMarkerAtMapPosition, inverted, visi
           onClick={handleFabClick}
         ></Button>
       </div>
-      <Switch>
-        <Route path="/events/:id">
-          <Suspense fallback={Loader}>
+      <Suspense fallback={Loader}>
+        <Switch>
+          <Route path="/events/:id">
             <EventDetails inverted={inverted} />
-          </Suspense>
-        </Route>
-        <Route exact path="/submit">
-          <Suspense fallback={Loader}>
+          </Route>
+          <Route exact path="/submit">
             <EventSubmit inverted={inverted} />
-          </Suspense>
-        </Route>
-        <Route exact path="/sos">
-          <LoadingPanel inverted={inverted} />
-        </Route>
-        <Route>
-          <Suspense fallback={Loader}>
+          </Route>
+          <Route exact path="/sos">
+            <LoadingPanel inverted={inverted} />
+          </Route>
+          <Route>
             <EventList inverted={inverted} />
-          </Suspense>
-        </Route>
-      </Switch>
+          </Route>
+        </Switch>
+      </Suspense>
     </Sidebar>
   );
 };
