@@ -8,6 +8,7 @@ import {
   initializeGeolocation,
   getEvents,
   getEventTypes,
+  setMapPosition,
 } from "../actions";
 import Geolocator from "./Geolocator";
 import MapView from "./MapView";
@@ -22,6 +23,7 @@ const App = ({
   defaultPosition,
   getEvents,
   getEventTypes,
+  setMapPosition,
   inverted,
 }) => {
   const [controlsVisible, setControlsVisible] = useState(true);
@@ -50,7 +52,7 @@ const App = ({
     const { _sw, _ne } = context.getBounds();
     // const meters = getDistance(_sw, _ne);
     const radius = Coordinate.distanceBetween(_sw, _ne) / 2;
-    // setMapPosition([lon, lat]);
+    setMapPosition([lng, lat]);
     getEvents({ coordinates: { lon: lng, lat }, radius });
   };
 
@@ -99,4 +101,5 @@ export default connect(mapStateToProps, {
   initializeGeolocation,
   getEvents,
   getEventTypes,
+  setMapPosition,
 })(App);
