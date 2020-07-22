@@ -9,21 +9,26 @@ import {
 import { connect } from "react-redux";
 import { Sidebar, Button } from "semantic-ui-react";
 
+import { setMarkerPosition, setMarkerAtMapPosition } from "../actions";
 import LoadingPanel from "./LoadingPanel";
 
 const EventList = React.lazy(() => import("./EventList"));
 const EventDetails = React.lazy(() => import("./EventDetails"));
 const EventSubmit = React.lazy(() => import("./EventSubmit"));
 
-const BottomSheet = ({ inverted, visible }) => {
+const BottomSheet = ({ setMarkerPosition, setMarkerAtMapPosition, inverted, visible }) => {
   const location = useLocation();
   const history = useHistory();
-  const Loader = useMemo(() => <LoadingPanel />, [inverted]);
+  const Loader = useMemo(() => <LoadingPanel inverted={inverted} />, [
+    inverted,
+  ]);
 
   const handleFabClick = () => {
     if (location.pathname === "/submit") {
+      setMarkerPosition(null);
       history.push("/");
     } else {
+      setMarkerAtMapPosition();
       history.push("/submit");
     }
   };
@@ -75,4 +80,6 @@ const mapStateToProps = (state) => {
   return { inverted: state.preferences.invertedTheme };
 };
 
-export default connect(mapStateToProps, {})(withRouter(BottomSheet));
+export default connect(mapStateToProps, { setMarkerPosition, setMarkerAtMapPosition })(
+  withRouter(BottomSheet)
+);
