@@ -3,6 +3,7 @@ import {
   SET_USE_GEOLOCATION,
   SET_DEFAULT_POSITION,
   SET_MARKER_POSITION,
+  SET_MAP_POSITION,
 } from "./types";
 
 export const setMarkerPosition = (coordinates) => {
@@ -10,6 +11,13 @@ export const setMarkerPosition = (coordinates) => {
     type: SET_MARKER_POSITION,
     payload: coordinates,
   };
+};
+
+export const setMarkerAtMapPosition = () => (dispatch, getState) => {
+  dispatch({
+    type: SET_MARKER_POSITION,
+    payload: getState().map.mapPosition,
+  });
 };
 
 export const setDefaultPosition = (coordinates) => {
@@ -23,6 +31,13 @@ export const setDefaultPosition = (coordinates) => {
 export const setCurrentPosition = (position) => {
   return {
     type: SET_CURRENT_POSITION,
+    payload: position,
+  };
+};
+
+export const setMapPosition = (position) => {
+  return {
+    type: SET_MAP_POSITION,
     payload: position,
   };
 };
@@ -42,8 +57,7 @@ export const setUseGeolocation = (preferred) => async (dispatch) => {
 };
 
 export const initializeGeolocation = () => async (dispatch, getState) => {
-  const preferred =
-    JSON.parse(localStorage.getItem(SET_USE_GEOLOCATION));
+  const preferred = JSON.parse(localStorage.getItem(SET_USE_GEOLOCATION));
 
   let permitted;
   navigator.permissions
